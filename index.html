@@ -1,0 +1,3112 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>వాస్తు శాస్త్ర సలహాదారు</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a0800">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="వాస్తు">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Telugu&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Tiro Telugu',serif;background:#1a0800;color:#fdf6e3;min-height:100vh;font-size:15px;}
+.hdr{background:linear-gradient(135deg,#8B2500,#3B1F0A);padding:16px;text-align:center;border-bottom:2px solid #D4A017;}
+.hdr h1{font-family:'Cinzel',serif;font-size:13px;color:#F5C842;letter-spacing:2px;}
+.hdr h2{font-size:22px;color:#E8651A;margin:4px 0;}
+.hdr p{font-size:11px;color:rgba(253,246,227,0.5);font-style:italic;}
+.tabs{display:flex;overflow-x:auto;background:#0d0400;border-bottom:1px solid rgba(212,160,23,0.3);-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:0 0 auto;padding:12px 16px;font-family:'Tiro Telugu',serif;font-size:13px;color:rgba(253,246,227,0.5);background:none;border:none;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;}
+.tab.active{color:#F5C842;border-bottom-color:#E8651A;}
+.panel{display:none;padding:12px;}
+.panel.active{display:block;}
+.card{background:rgba(59,31,10,0.7);border:1px solid rgba(212,160,23,0.2);border-radius:12px;padding:14px;margin-bottom:12px;}
+.card-title{font-size:19px;color:#E8651A;margin-bottom:10px;}
+.section-lbl{font-size:11px;color:rgba(212,160,23,0.7);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+
+/* PANCHANGA */
+.pancha-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.pancha-item{background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;border:1px solid rgba(212,160,23,0.15);}
+.pancha-val{font-size:17px;color:#F5C842;}
+.pancha-sub{font-size:11px;color:rgba(253,246,227,0.5);font-style:italic;}
+
+/* MUHURTHA */
+.slot{border-radius:8px;padding:10px;margin-bottom:8px;}
+.slot.good{background:rgba(45,106,45,0.25);border:1px solid rgba(45,106,45,0.4);}
+.slot.bad{background:rgba(139,37,0,0.25);border:1px solid rgba(139,37,0,0.4);}
+.slot.ok{background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.3);}
+.slot-time{font-size:12px;color:#F5C842;margin-bottom:2px;}
+.slot-name{font-size:17px;}
+.slot-desc{font-size:12px;color:rgba(253,246,227,0.6);font-style:italic;}
+
+/* DAILY MSG */
+.daily-msg{background:rgba(45,106,45,0.2);border:1px solid rgba(45,106,45,0.4);border-radius:10px;padding:14px;}
+.daily-msg p{font-size:17px;line-height:1.8;margin-bottom:6px;}
+.daily-msg small{font-size:12px;color:rgba(253,246,227,0.6);font-style:italic;}
+
+/* COMPASS */
+.compass-wrap{position:relative;width:260px;height:260px;margin:10px auto;}
+.compass-bg{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#1a0800,#0d0400);border:2px solid rgba(212,160,23,0.3);}
+.dir-btn{position:absolute;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;border:1px solid rgba(212,160,23,0.35);background:rgba(59,31,10,0.9);color:#fdf6e3;font-family:'Tiro Telugu',serif;font-size:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:all 0.2s;}
+.dir-btn.sel,.dir-btn:active{background:linear-gradient(135deg,#E8651A,#C4520E);border-color:#F5C842;}
+.dir-btn .ico{font-size:15px;}
+.dir-btn .en{font-size:9px;opacity:0.6;}
+.compass-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:radial-gradient(circle,#D4A017,#C4520E);display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid #F5C842;cursor:pointer;}
+
+/* RESULT BOX */
+.result-box{margin-top:10px;border-radius:10px;padding:14px;display:none;}
+.result-box.show{display:block;animation:fadeIn 0.4s ease;}
+.result-box.good{background:rgba(45,106,45,0.2);border:1px solid rgba(45,106,45,0.4);}
+.result-box.warn{background:rgba(139,37,0,0.2);border:1px solid rgba(139,37,0,0.4);}
+.result-te{font-size:17px;line-height:1.8;margin-bottom:8px;}
+.result-en{font-size:12px;color:rgba(253,246,227,0.65);font-style:italic;margin-bottom:8px;}
+.remedies{margin-top:8px;background:rgba(212,160,23,0.08);border-left:3px solid #D4A017;padding:10px 12px;border-radius:0 8px 8px 0;}
+.remedies h4{font-size:15px;color:#F5C842;margin-bottom:6px;}
+.remedies li{font-size:14px;padding:3px 0;list-style:none;border-bottom:1px solid rgba(212,160,23,0.1);}
+.remedies li::before{content:'✦ ';color:#D4A017;}
+
+/* ROOMS */
+.room-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.room-btn{padding:14px 8px;background:rgba(59,31,10,0.7);border:1px solid rgba(212,160,23,0.2);border-radius:10px;color:#fdf6e3;font-family:'Tiro Telugu',serif;font-size:13px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.room-btn.sel,.room-btn:active{background:linear-gradient(135deg,#E8651A,#C4520E);border-color:#F5C842;}
+.room-ico{font-size:22px;display:block;margin-bottom:4px;}
+
+/* HOUSE PLAN */
+.house-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin:10px auto;max-width:320px;}
+.zone{border-radius:8px;padding:10px 5px;text-align:center;cursor:pointer;transition:all 0.2s;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+.zone:active{transform:scale(0.96);}
+.zone .z-ico{font-size:18px;}
+.zone .z-te{font-size:11px;line-height:1.3;}
+.zone .z-dir{font-size:9px;opacity:0.6;}
+.z-green{background:rgba(45,106,45,0.3);border:1px solid rgba(45,106,45,0.5);}
+.z-orange{background:rgba(232,101,26,0.2);border:1px solid rgba(232,101,26,0.4);}
+.z-gold{background:rgba(212,160,23,0.15);border:1px solid rgba(212,160,23,0.4);}
+.z-blue{background:rgba(74,144,184,0.2);border:1px solid rgba(74,144,184,0.4);}
+.z-center{background:radial-gradient(circle,rgba(212,160,23,0.3),rgba(59,31,10,0.5));border:2px solid rgba(212,160,23,0.6);}
+.z-red{background:rgba(139,37,0,0.2);border:1px solid rgba(139,37,0,0.4);}
+
+/* CHAT */
+.chat-box{background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.15);border-radius:10px;padding:12px;height:340px;overflow-y:auto;margin-bottom:10px;}
+.msg{display:flex;gap:8px;margin-bottom:12px;animation:fadeIn 0.3s ease;}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#E8651A,#C4520E);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1px solid #D4A017;}
+.av.user{background:linear-gradient(135deg,#2a6080,#1a3a50);}
+.bubble{flex:1;background:rgba(59,31,10,0.6);border:1px solid rgba(212,160,23,0.12);border-radius:0 10px 10px 10px;padding:10px 12px;font-size:14px;line-height:1.7;}
+.bubble.user{background:rgba(74,144,184,0.12);border-color:rgba(74,144,184,0.2);border-radius:10px 0 10px 10px;}
+.chat-row{display:flex;gap:8px;}
+.chat-in{flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(212,160,23,0.25);border-radius:10px;padding:12px;color:#fdf6e3;font-family:'Tiro Telugu',serif;font-size:14px;outline:none;}
+.chat-in::placeholder{color:rgba(253,246,227,0.3);}
+.send-btn{padding:12px 16px;background:linear-gradient(135deg,#E8651A,#C4520E);border:none;border-radius:10px;color:#fff;font-size:18px;cursor:pointer;}
+.send-btn:disabled{opacity:0.5;}
+.dots{display:flex;gap:5px;padding:4px;}
+.dot{width:7px;height:7px;border-radius:50%;background:#D4A017;animation:bounce 1.2s infinite;}
+.dot:nth-child(2){animation-delay:.2s;}.dot:nth-child(3){animation-delay:.4s;}
+
+/* METER */
+.meter-row{margin-bottom:10px;}
+.meter-lbl{font-size:13px;margin-bottom:3px;}
+.meter-bar{height:12px;background:rgba(0,0,0,0.4);border-radius:6px;overflow:hidden;border:1px solid rgba(212,160,23,0.15);}
+.meter-fill{height:100%;border-radius:6px;transition:width 1.5s ease;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,80%,100%{transform:scale(0.7);opacity:0.5}40%{transform:scale(1.2);opacity:1}}
+.lang-btn{padding:6px 12px;background:rgba(255,255,255,0.08);border:1px solid rgba(212,160,23,0.25);border-radius:20px;color:rgba(253,246,227,0.7);font-size:12px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.lang-btn:active,.active-lang{background:rgba(212,160,23,0.25);border-color:#F5C842;color:#F5C842;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>VASTU SHASTRA</h1>
+  <h2 id="app-title">🕉️ వాస్తు శాస్త్ర సలహాదారు</h2>
+  <p id="app-subtitle">పురాతన భారతీయ వాస్తు జ్ఞానం • Ancient Indian Vastu Wisdom</p>
+  <!-- Language Selector -->
+  <div style="display:flex;justify-content:center;gap:6px;margin-top:10px;flex-wrap:wrap;">
+    <button onclick="setLang('te')" id="lang-te" class="lang-btn active-lang">🇮🇳 తెలుగు</button>
+    <button onclick="setLang('en')" id="lang-en" class="lang-btn">🇬🇧 English</button>
+    <button onclick="setLang('hi')" id="lang-hi" class="lang-btn">🇮🇳 हिंदी</button>
+    <button onclick="setLang('kn')" id="lang-kn" class="lang-btn">🇮🇳 ಕನ್ನಡ</button>
+    <button onclick="setLang('ta')" id="lang-ta" class="lang-btn">🇮🇳 தமிழ்</button>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" onclick="switchTab('daily',this)">📅 నేటి వాస్తు</button>
+  <button class="tab" onclick="switchTab('dirs',this)">🧭 దిశలు</button>
+  <button class="tab" onclick="switchTab('rooms',this)">🏠 గది వాస్తు</button>
+  <button class="tab" onclick="switchTab('plan',this)">🗺️ గృహ నక్ష</button>
+  <button class="tab" onclick="switchTab('compass',this)">🧲 కంపాస్</button>
+  <button class="tab" onclick="switchTab('monthly',this)">📆 మాస ముహూర్తాలు (శుభ సమయాలు)</button>
+  <button class="tab" onclick="switchTab('guru',this)">🔮 గురువు</button>
+</div>
+
+<!-- DAILY -->
+<div class="panel active" id="panel-daily">
+  <div class="card">
+    <div class="card-title" id="ct-panch">📅 నేటి పంచాంగం</div>
+    <div class="pancha-grid" id="pancha"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" id="ct-muhurtha">⏰ శుభ ముహూర్తాలు</div>
+    <!-- Date Picker Row -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <input type="date" id="muhurtha-date"
+        style="flex:1;min-width:140px;background:rgba(0,0,0,0.4);border:1px solid rgba(212,160,23,0.35);border-radius:8px;padding:10px 12px;color:#F5C842;font-family:'Tiro Telugu',serif;font-size:14px;outline:none;-webkit-appearance:none;color-scheme:dark;"
+        onchange="updateMuhurtha()">
+      <button id="today-btn" onclick="setToday()" style="padding:10px 14px;background:rgba(212,160,23,0.15);border:1px solid rgba(212,160,23,0.35);border-radius:8px;color:#F5C842;font-family:'Tiro Telugu',serif;font-size:13px;cursor:pointer;white-space:nowrap;">📅 నేడు</button>
+      <button onclick="checkAI()" id="ai-muhurtha-btn" style="padding:10px 14px;background:linear-gradient(135deg,#E8651A,#C4520E);border:none;border-radius:8px;color:#fff;font-family:'Tiro Telugu',serif;font-size:13px;cursor:pointer;white-space:nowrap;">🔮 AI సలహా</button>
+    </div>
+    <!-- Selected date panchanga summary -->
+    <div id="sel-pancha" style="background:rgba(0,0,0,0.25);border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px;color:rgba(253,246,227,0.7);display:flex;flex-wrap:wrap;gap:8px;"></div>
+    <!-- Muhurtha slots -->
+    <div id="muhurtha"></div>
+    <!-- AI result -->
+    <div id="ai-muhurtha-result" style="display:none;margin-top:10px;background:rgba(45,106,45,0.15);border:1px solid rgba(45,106,45,0.35);border-radius:10px;padding:12px;font-size:14px;line-height:1.8;white-space:pre-wrap;"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" id="ct-energy">⚡ వాస్తు శక్తి సూచీ</div>
+    <div id="meters"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" id="ct-msg">🌟 నేటి వాస్తు సందేశం</div>
+    <div class="daily-msg" id="daily-msg"></div>
+  </div>
+</div>
+
+<!-- DIRECTIONS -->
+<div class="panel" id="panel-dirs">
+  <div class="card">
+    <div class="card-title" id="ct-dirs">🧭 వాస్తు దిశలు</div>
+    <p style="font-size:12px;color:rgba(253,246,227,0.5);margin-bottom:10px;"><span id="sub-dirs">దిశపై నొక్కండి • Tap a direction</span></p>
+    <div class="compass-wrap">
+      <div class="compass-bg"></div>
+      <button class="dir-btn" style="top:9%;left:50%" onclick="showDir('N',this)"><span class="ico">☀️</span><span>ఉత్తర</span><span class="en">North</span></button>
+      <button class="dir-btn" style="top:21%;left:79%" onclick="showDir('NE',this)"><span class="ico">🙏</span><span>ఈశాన్య</span><span class="en">NE</span></button>
+      <button class="dir-btn" style="top:50%;left:91%" onclick="showDir('E',this)"><span class="ico">🌅</span><span>తూర్పు</span><span class="en">East</span></button>
+      <button class="dir-btn" style="top:79%;left:79%" onclick="showDir('SE',this)"><span class="ico">🔥</span><span>ఆగ్నేయ</span><span class="en">SE</span></button>
+      <button class="dir-btn" style="top:91%;left:50%" onclick="showDir('S',this)"><span class="ico">⚖️</span><span>దక్షిణ</span><span class="en">South</span></button>
+      <button class="dir-btn" style="top:79%;left:21%" onclick="showDir('SW',this)"><span class="ico">🏋️</span><span>నైఋతి (దక్షిణ-పశ్చిమ మూల)</span><span class="en">SW</span></button>
+      <button class="dir-btn" style="top:50%;left:9%" onclick="showDir('W',this)"><span class="ico">🌊</span><span>పశ్చిమ</span><span class="en">West</span></button>
+      <button class="dir-btn" style="top:21%;left:21%" onclick="showDir('NW',this)"><span class="ico">💨</span><span>వాయవ్య</span><span class="en">NW</span></button>
+      <div class="compass-center" onclick="showDir('C',null)">🕉️</div>
+    </div>
+    <div class="result-box" id="dir-result"></div>
+  </div>
+</div>
+
+<!-- ROOMS -->
+<div class="panel" id="panel-rooms">
+  <div class="card">
+    <div class="card-title" id="ct-rooms">🏠 గది వాస్తు మార్గదర్శి</div>
+    <p style="font-size:12px;color:rgba(253,246,227,0.5);margin-bottom:10px;"><span id="sub-rooms">గదిపై నొక్కండి • Tap a room</span></p>
+    <div class="room-grid" id="room-grid"></div>
+    <div class="result-box" id="room-result"></div>
+  </div>
+</div>
+
+<!-- HOUSE PLAN -->
+<div class="panel" id="panel-plan">
+  <div class="card">
+    <div class="card-title" id="ct-plan">🗺️ వాస్తు పురుష మండలం</div>
+    <p style="font-size:12px;color:rgba(253,246,227,0.5);margin-bottom:6px;"><span id="sub-plan">మండలంపై నొక్కండి • Tap any zone</span></p>
+    <div class="house-grid" id="house-grid"></div>
+    <div class="result-box" id="zone-result"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" id="ct-defects">⚠️ వాస్తు దోషాలు & పరిహారాలు</div>
+    <div id="defects"></div>
+  </div>
+</div>
+
+<!-- LIVE COMPASS -->
+<div class="panel" id="panel-compass">
+  <div class="card">
+    <div class="card-title" id="ct-compass">🧲 లైవ్ వాస్తు కంపాస్</div>
+
+    <!-- CALIBRATION GUIDE -->
+    <div id="calib-guide" style="background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.3);border-radius:10px;padding:12px;margin-bottom:12px;font-size:13px;line-height:1.7;">
+      <div style="color:#F5C842;font-size:14px;margin-bottom:4px;">📐 ముందు చేయాల్సినది — Calibration</div>
+      <div style="color:rgba(253,246,227,0.75);">1️⃣ ఫోన్ flat గా పట్టుకోండి (భూమికి సమాంతరంగా)<br>2️⃣ Start నొక్కి, ఫోన్‌తో <b>figure-8 (∞)</b> గీయండి — 3 సార్లు<br>3️⃣ అప్పుడు మీరు చూసే దిశకు పట్టుకోండి<br><span style="font-size:11px;opacity:0.6;font-style:italic">Hold phone flat → tap Start → draw figure-8 in air 3 times → point to wall</span></div>
+    </div>
+
+    <!-- ACCURACY BAR -->
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(253,246,227,0.5);margin-bottom:4px;">
+        <span>Accuracy</span><span id="c-accuracy-lbl">---</span>
+      </div>
+      <div style="height:6px;background:rgba(0,0,0,0.4);border-radius:3px;overflow:hidden;">
+        <div id="c-accuracy-bar" style="height:100%;width:0%;background:#2D6A2D;border-radius:3px;transition:width 0.5s,background 0.5s;"></div>
+      </div>
+    </div>
+
+    <!-- COMPASS DIAL -->
+    <div style="position:relative;width:270px;height:270px;margin:0 auto 14px;">
+      <canvas id="compass-canvas" width="270" height="270" style="position:absolute;inset:0;border-radius:50%;"></canvas>
+      <!-- Fixed needle — always points up, dial rotates -->
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+        <div style="position:relative;width:10px;height:120px;">
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:60px solid #E8651A;filter:drop-shadow(0 0 8px #E8651A);"></div>
+          <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:60px solid rgba(180,180,180,0.4);"></div>
+        </div>
+      </div>
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#F5C842,#C4520E);border:2px solid #fff;z-index:5;box-shadow:0 0 8px rgba(212,160,23,0.6);"></div>
+    </div>
+
+    <!-- DEGREE + DIRECTION -->
+    <div style="text-align:center;margin-bottom:14px;">
+      <div id="c-deg" style="font-family:'Cinzel',serif;font-size:42px;color:#F5C842;line-height:1;">---</div>
+      <div id="c-dir-te" style="font-size:24px;color:#E8651A;margin:4px 0;">---</div>
+      <div id="c-dir-en" style="font-size:12px;color:rgba(253,246,227,0.55);font-style:italic;">Start నొక్కండి</div>
+    </div>
+
+    <!-- VASTU BOX -->
+    <div id="c-vastu" style="background:rgba(59,31,10,0.6);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:14px;min-height:60px;font-size:15px;line-height:1.8;text-align:center;color:rgba(253,246,227,0.4);font-style:italic;">
+      " + (getLang().compassInit||"కంపాస్ ప్రారంభించండి...") + "
+    </div>
+
+    <!-- BUTTONS ROW -->
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button id="c-btn" onclick="startCompass()" style="flex:1;padding:14px;background:linear-gradient(135deg,#E8651A,#C4520E);border:none;border-radius:10px;color:#fff;font-family:'Tiro Telugu',serif;font-size:15px;cursor:pointer;">
+        🧲 Start Compass
+      </button>
+      <button onclick="recalibrateCompass()" style="padding:14px 16px;background:rgba(212,160,23,0.15);border:1px solid rgba(212,160,23,0.3);border-radius:10px;color:#F5C842;font-size:13px;cursor:pointer;">
+        🔄 Reset
+      </button>
+    </div>
+    <div id="c-status" style="text-align:center;font-size:11px;color:rgba(253,246,227,0.4);margin-top:8px;font-style:italic;min-height:16px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" id="ct-dir-sum">📋 దిశ వాస్తు సంక్షిప్తం</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="dir-summary"></div>
+  </div>
+</div>
+
+<!-- GURU CHAT -->
+<div class="panel" id="panel-guru">
+  <div class="card">
+    <div class="card-title" id="ct-guru">🔮 వాస్తు గురువుతో సంభాషణ</div>
+    <p id="guru-sub" style="font-size:12px;color:rgba(253,246,227,0.5);margin-bottom:10px;">తెలుగు / English లో అడగండి • 🎤 మైక్ వాడండి • 🌐 Real AI</p>
+
+    <!-- Simple Glossary -->
+    <details style="margin-bottom:10px;">
+      <summary style="background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.25);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:13px;color:#F5C842;list-style:none;">
+        📖 కష్టమైన పదాల అర్థాలు తెలుసుకోండి (tap చేయండి)
+      </summary>
+      <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(212,160,23,0.15);border-radius:0 0 8px 8px;padding:12px;font-size:13px;line-height:2;">
+        <b style="color:#F5C842;">దిశలు:</b><br>
+        🙏 <b>ఈశాన్యం</b> = ఉత్తర-తూర్పు మూల (North-East corner)<br>
+        🔥 <b>ఆగ్నేయం</b> = దక్షిణ-తూర్పు మూల (South-East corner)<br>
+        💪 <b>నైఋతి</b> = దక్షిణ-పశ్చిమ మూల (South-West corner)<br>
+        💨 <b>వాయవ్యం</b> = ఉత్తర-పశ్చిమ మూల (North-West corner)<br>
+        <br>
+        <b style="color:#F5C842;">సమయాలు:</b><br>
+        ⭐ <b>అభిజిత్</b> = రోజులో అత్యంత మంచి సమయం (11:48-12:36)<br>
+        🌅 <b>బ్రాహ్మీ</b> = తెల్లవారుజామున 5-6 AM — పవిత్ర సమయం<br>
+        ❌ <b>రాహు కాలం</b> = ఈ సమయంలో ముఖ్య పనులు చేయవద్దు<br>
+        ⚠️ <b>యమ గండం</b> = మరొక జాగ్రత్త సమయం<br>
+        📅 <b>ముహూర్తం</b> = శుభమైన సమయం<br>
+        <br>
+        <b style="color:#F5C842;">పంచాంగం పదాలు:</b><br>
+        ⭐ <b>నక్షత్రం</b> = ఆకాశంలో star — ఆ రోజు శుభాశుభాలు తెలుపుతుంది<br>
+        🌙 <b>తిథి</b> = చంద్రుని ప్రకారం రోజు (1 నుండి 15)<br>
+        🔯 <b>యోగం</b> = ఆ రోజు మొత్తం స్వభావం<br>
+        <br>
+        <b style="color:#F5C842;">వాస్తు పదాలు:</b><br>
+        ✅ <b>శుభం / అనుకూలం</b> = మంచిది, పర్లేదు<br>
+        ❌ <b>అశుభం / వర్జించండి</b> = చేయవద్దు<br>
+        🔧 <b>పరిహారం</b> = సమస్య తగ్గించే మార్గం<br>
+        ⚠️ <b>దోషం</b> = సమస్య కలిగించే స్థానం<br>
+        🏛️ <b>బ్రహ్మస్థానం</b> = ఇంటి మధ్య భాగం — ఖాళీగా ఉంచాలి<br>
+        💰 <b>కుబేర</b> = సంపద దేవుడు (ఉత్తర దిశకు అధిపతి)
+      </div>
+    </details>
+    <div class="chat-box" id="chat-box">
+      <div class="msg">
+        <div class="av">🕉️</div>
+        <div class="bubble">నమస్కారం! నేను మీ వాస్తు గురువును 🙏 ఇంటి గురించి, దిశల గురించి, గదుల గురించి — ఏదైనా అడగండి. తెలుగులో లేదా English లో మాట్లాడండి!<br><small style="font-size:11px;opacity:0.6">Ask anything about Vastu — rooms, directions, remedies, or problems. No internet needed!</small></div>
+      </div>
+    </div>
+    <div class="chat-row">
+      <input class="chat-in" id="chat-in" type="text" placeholder="మీ వాస్తు ప్రశ్న... (Your question...)" onkeydown="if(event.key==='Enter')sendMsg()">
+      <button id="mic-btn" onclick="toggleMic()" style="padding:12px 14px;background:rgba(212,160,23,0.15);border:1px solid rgba(212,160,23,0.35);border-radius:10px;color:#F5C842;font-size:18px;cursor:pointer;transition:all 0.2s;flex-shrink:0;">🎤</button>
+      <button class="send-btn" id="send-btn" onclick="sendMsg()">🔮</button>
+    </div>
+    <div id="mic-status" style="text-align:center;font-size:11px;color:rgba(253,246,227,0.4);margin-top:6px;font-style:italic;min-height:16px;"></div>
+  </div>
+</div>
+
+<!-- MONTHLY MUHURTHAS -->
+<div class="panel" id="panel-monthly">
+  <div class="card">
+    <div class="card-title" id="monthly-title">📆 మాస శుభ ముహూర్తాలు (శుభ సమయాలు)</div>
+
+    <!-- Month Navigation -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;">
+      <button onclick="changeMonth(-1)" style="padding:10px 16px;background:rgba(212,160,23,0.15);border:1px solid rgba(212,160,23,0.3);border-radius:8px;color:#F5C842;font-size:18px;cursor:pointer;">◀</button>
+      <div id="month-label" style="font-size:18px;color:#F5C842;text-align:center;flex:1;font-family:Tiro Telugu,serif;"></div>
+      <button onclick="changeMonth(1)" style="padding:10px 16px;background:rgba(212,160,23,0.15);border:1px solid rgba(212,160,23,0.3);border-radius:8px;color:#F5C842;font-size:18px;cursor:pointer;">▶</button>
+    </div>
+
+    <!-- Legend -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;font-size:12px;">
+      <span style="background:rgba(45,106,45,0.3);border:1px solid rgba(45,106,45,0.5);border-radius:20px;padding:3px 10px;">🟢 శుభం</span>
+      <span style="background:rgba(139,37,0,0.3);border:1px solid rgba(139,37,0,0.5);border-radius:20px;padding:3px 10px;">🔴 చేయవద్దు ❌</span>
+      <span style="background:rgba(212,160,23,0.2);border:1px solid rgba(212,160,23,0.4);border-radius:20px;padding:3px 10px;">🟡 సాధారణం</span>
+      <span style="background:rgba(74,144,184,0.2);border:1px solid rgba(74,144,184,0.4);border-radius:20px;padding:3px 10px;">📅 నేడు</span>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div id="monthly-calendar" style="margin-bottom:14px;"></div>
+  </div>
+
+  <!-- Day Detail Card -->
+  <div class="card" id="day-detail-card" style="display:none;">
+    <div class="card-title" id="day-detail-title"></div>
+    <div id="day-detail-content"></div>
+    <button onclick="askGuru(document.getElementById('day-detail-ask').value)" style="width:100%;margin-top:10px;padding:11px;background:linear-gradient(135deg,rgba(212,160,23,0.2),rgba(232,101,26,0.2));border:1px solid rgba(212,160,23,0.4);border-radius:10px;color:#F5C842;font-family:Tiro Telugu,serif;font-size:14px;cursor:pointer;">
+      🔮 గురువును అడగండి
+    </button>
+    <input type="hidden" id="day-detail-ask" value="">
+  </div>
+
+  <!-- Best Days Summary -->
+  <div class="card">
+    <div class="card-title" id="best-days-title">⭐ ఈ నెల అత్యుత్తమ దినాలు</div>
+    <div id="best-days-list"></div>
+  </div>
+</div>
+
+
+<script>
+// ============ MULTI-LANGUAGE SUPPORT — TOP OF SCRIPT ============
+var currentLang = "te";
+
+var LANG = {
+  te:{
+    appTitle:"🕉️ వాస్తు శాస్త్ర సలహాదారు",
+    appSub:"పురాతన భారతీయ వాస్తు జ్ఞానం • Ancient Indian Vastu Wisdom",
+    tabs:["📅 నేటి వాస్తు","🧭 దిశలు","🏠 గది వాస్తు","🗺️ గృహ నక్ష","🧲 కంపాస్","📆 మాస ముహూర్తాలు","🔮 గురువు"],
+    ctPanch:"📅 నేటి పంచాంగం",ctMuhurtha:"⏰ శుభ ముహూర్తాలు",
+    ctEnergy:"⚡ వాస్తు శక్తి సూచీ",ctMsg:"🌟 నేటి వాస్తు సందేశం",
+    ctDirs:"🧭 వాస్తు దిశలు",ctRooms:"🏠 గది వాస్తు మార్గదర్శి",
+    ctPlan:"🗺️ వాస్తు పురుష మండలం",ctDefects:"⚠️ వాస్తు దోషాలు & పరిహారాలు",
+    ctCompass:"🧲 లైవ్ వాస్తు కంపాస్",ctGuru:"🔮 వాస్తు గురువుతో సంభాషణ",
+    ctDirSum:"📋 దిశ వాస్తు సంక్షిప్తం",ctMonthly:"📆 మాస శుభ ముహూర్తాలు",
+    ctBestDays:"⭐ ఈ నెల అత్యుత్తమ దినాలు",
+    subDirs:"దిశపై నొక్కండి",subRooms:"గదిపై నొక్కండి",subPlan:"మండలంపై నొక్కండి",
+    placeholder:"మీ వాస్తు ప్రశ్న...",todayBtn:"📅 నేడు",aiBtn:"🔮 AI సలహా",
+    compassStart:"🧲 Start Compass",compassReset:"🔄 Reset",compassInit:"కంపాస్ ప్రారంభించండి...",
+    askGuruBtn:"🔮 గురువును అడగండి",
+    guruSub:"తెలుగు / English లో అడగండి • 🎤 మైక్ • 🌐 Real AI",
+    guruWelcome:"నమస్కారం! నేను మీ AI వాస్తు గురువును 🙏",
+    guruLang:"Telugu",
+    months:["జనవరి","ఫిబ్రవరి","మార్చి","ఏప్రిల్","మే","జూన్","జులై","ఆగస్ట్","సెప్టెంబర్","అక్టోబర్","నవంబర్","డిసెంబర్"],
+    teMonths:["జన","ఫిబ్ర","మార్చి","ఏప్రి","మే","జూన్","జులై","ఆగ","సెప్","అక్టో","నవ","డిసె"],
+    dayNames:["ఆదివారం","సోమవారం","మంగళవారం","బుధవారం","గురువారం","శుక్రవారం","శనివారం"],
+    panLabels:["వారం","తేదీ","నక్షత్రం ⭐","తిథి 🌙","యోగం 🔯","వారం దేవత"],
+    deities:["సూర్యుడు","చంద్రుడు","మంగళుడు","బుధుడు","బృహస్పతి","శుక్రుడు","శనిశ్చర"],
+    mLabels:["ఆర్థిక శక్తి 💰","ఆరోగ్య శక్తి 💚","వైవాహిక సంతోషం 💕","కెరీర్ సౌభాగ్యం 🚀"],
+    slotNames:["బ్రాహ్మీ ముహూర్తం 🌅","ఉదయ లగ్నం","రాహు కాలం ⚠️","యమ గండం ⚠️","అభిజిత్ ✨","గులిక కాలం ⚠️","సాయం సంధ్య 🌅","నిశీధి కాలం"],
+    slotDescs:["ప్రార్థన, ధ్యానానికి చాలా మంచిది","కొత్త పని ప్రారంభానికి శుభం","ఈ సమయంలో పని చేయవద్దు","ముఖ్యమైన పనులు చేయకూడదు","అన్ని శుభ కార్యాలకు మంచిది","నిర్ణయాలు వాయిదా వేయండి","పూజ, ధ్యానానికి మంచి సమయం","సాధారణ పనులకు అనుకూలం"],
+    goodRating:"🟢 శుభం",okRating:"🟡 సాధారణం",badRating:"🔴 జాగ్రత్త",
+    todayLbl:"నేడు",inDays:"రోజుల తర్వాత",daysAgo:"రోజుల క్రితం"
+  },
+  en:{
+    appTitle:"🕉️ Vastu Shastra Advisor",
+    appSub:"Ancient Indian Vastu Wisdom • 5000+ Years of Knowledge",
+    tabs:["📅 Today","🧭 Directions","🏠 Rooms","🗺️ House Plan","🧲 Compass","📆 Monthly","🔮 Guru"],
+    ctPanch:"📅 Today's Panchanga",ctMuhurtha:"⏰ Auspicious Timings",
+    ctEnergy:"⚡ Vastu Energy Index",ctMsg:"🌟 Today's Vastu Message",
+    ctDirs:"🧭 Vastu Directions",ctRooms:"🏠 Room Vastu Guide",
+    ctPlan:"🗺️ Vastu Purusha Mandala",ctDefects:"⚠️ Vastu Defects & Remedies",
+    ctCompass:"🧲 Live Vastu Compass",ctGuru:"🔮 Vastu Guru Chat",
+    ctDirSum:"📋 Direction Vastu Summary",ctMonthly:"📆 Monthly Auspicious Timings",
+    ctBestDays:"⭐ Best Days This Month",
+    subDirs:"Tap a direction",subRooms:"Tap a room",subPlan:"Tap any zone",
+    placeholder:"Ask your Vastu question...",todayBtn:"📅 Today",aiBtn:"🔮 AI Advice",
+    compassStart:"🧲 Start Compass",compassReset:"🔄 Reset",compassInit:"Start compass to see direction...",
+    askGuruBtn:"🔮 Ask Guru",
+    guruSub:"Ask in English or Telugu • 🎤 Use Mic • 🌐 Real AI",
+    guruWelcome:"Namaskaram! I am your AI Vastu Guru 🙏",
+    guruLang:"English",
+    tithi:["Pratipad", "Dwitiya", "Tritiya", "Chaturthi", "Panchami", "Shashthi", "Saptami", "Ashtami", "Navami", "Dashami", "Ekadashi", "Dwadashi", "Trayodashi", "Chaturdashi", "Purnima"],
+    yoga:["Vishkambha", "Preeti", "Ayushman", "Saubhagya", "Shobhana", "Atiganda", "Sukarma", "Dhriti", "Shula", "Ganda", "Vriddhi", "Dhruva", "Vyaghata", "Harshana", "Vajra", "Siddhi", "Vyatipata", "Variyan", "Parigha", "Shiva", "Siddha", "Sadhya", "Shubha", "Shukla", "Brahma", "Indra"],
+    nakshE:["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushyami", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishtha", "Shatabhisha", "Purva Bhadra", "Uttara Bhadra", "Revati"],
+    months:["January","February","March","April","May","June","July","August","September","October","November","December"],
+    teMonths:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+    dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    panLabels:["Day","Date","Nakshatra ⭐","Tithi 🌙","Yoga 🔯","Ruling Deity"],
+    deities:["Sun","Moon","Mars","Mercury","Jupiter","Venus","Saturn"],
+    mLabels:["Financial Energy 💰","Health Energy 💚","Relationship Joy 💕","Career Fortune 🚀"],
+    slotNames:["Braahmi Muhurtham 🌅","Sunrise Auspicious","Rahu Kalam ⚠️","Yama Gandam ⚠️","Abhijit Muhurtham ✨","Gulika Kalam ⚠️","Evening Sandhya 🌅","Night Period"],
+    slotDescs:["Best for prayer, yoga & meditation","Auspicious for new beginnings","Avoid all important work","Avoid important decisions","Most auspicious time of day","Postpone major decisions","Excellent for prayer & meditation","Suitable for routine activities"],
+    goodRating:"🟢 Auspicious",okRating:"🟡 Neutral",badRating:"🔴 Caution",
+    todayLbl:"Today",inDays:"days ahead",daysAgo:"days ago"
+  },
+  hi:{
+    appTitle:"🕉️ वास्तु शास्त्र सलाहकार",
+    appSub:"प्राचीन भारतीय वास्तु ज्ञान • 5000+ वर्ष पुरानी विद्या",
+    tabs:["📅 आज","🧭 दिशाएं","🏠 कमरे","🗺️ नक्शा","🧲 कम्पास","📆 मासिक","🔮 गुरु"],
+    ctPanch:"📅 आज का पंचांग",ctMuhurtha:"⏰ शुभ मुहूर्त",
+    ctEnergy:"⚡ वास्तु ऊर्जा सूचकांक",ctMsg:"🌟 आज का वास्तु संदेश",
+    ctDirs:"🧭 वास्तु दिशाएं",ctRooms:"🏠 कमरा वास्तु गाइड",
+    ctPlan:"🗺️ वास्तु पुरुष मंडल",ctDefects:"⚠️ वास्तु दोष और उपाय",
+    ctCompass:"🧲 लाइव वास्तु कम्पास",ctGuru:"🔮 वास्तु गुरु चैट",
+    ctDirSum:"📋 दिशा वास्तु सारांश",ctMonthly:"📆 मासिक शुभ मुहूर्त",
+    ctBestDays:"⭐ इस माह के सर्वोत्तम दिन",
+    subDirs:"दिशा पर टैप करें",subRooms:"कमरे पर टैप करें",subPlan:"जोन पर टैप करें",
+    placeholder:"वास्तु प्रश्न पूछें...",todayBtn:"📅 आज",aiBtn:"🔮 AI सलाह",
+    compassStart:"🧲 कम्पास शुरू करें",compassReset:"🔄 रीसेट",compassInit:"कम्पास शुरू करें...",
+    askGuruBtn:"🔮 गुरु से पूछें",
+    guruSub:"हिंदी / English में पूछें • 🎤 माइक • 🌐 Real AI",
+    guruWelcome:"नमस्कार! मैं आपका AI वास्तु गुरु हूं 🙏",
+    guruLang:"Hindi",
+    tithi:["प्रतिपदा", "द्वितीया", "तृतीया", "चतुर्थी", "पंचमी", "षष्ठी", "सप्तमी", "अष्टमी", "नवमी", "दशमी", "एकादशी", "द्वादशी", "त्रयोदशी", "चतुर्दशी", "पूर्णिमा"],
+    yoga:["विष्कंभ", "प्रीति", "आयुष्मान", "सौभाग्य", "शोभन", "अतिगंड", "सुकर्मा", "धृति", "शूल", "गंड", "वृद्धि", "ध्रुव", "व्याघात", "हर्षण", "वज्र", "सिद्धि", "व्यतीपात", "वरीयान", "परिघ", "शिव", "सिद्ध", "साध्य", "शुभ", "शुक्ल", "ब्रह्म", "इंद्र"],
+    nakshE:["अश्विनी", "भरणी", "कृत्तिका", "रोहिणी", "मृगशिरा", "आर्द्रा", "पुनर्वसु", "पुष्य", "आश्लेषा", "मघा", "पूर्व फाल्गुनी", "उत्तर फाल्गुनी", "हस्त", "चित्रा", "स्वाति", "विशाखा", "अनुराधा", "ज्येष्ठा", "मूल", "पूर्वाषाढ़", "उत्तराषाढ़", "श्रवण", "धनिष्ठा", "शतभिषा", "पूर्व भाद्रपद", "उत्तर भाद्रपद", "रेवती"],
+    months:["जनवरी","फरवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितंबर","अक्टूबर","नवंबर","दिसंबर"],
+    teMonths:["जन","फर","मार","अप्र","मई","जून","जुल","अग","सित","अक्ट","नव","दिस"],
+    dayNames:["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"],
+    panLabels:["वार","तारीख","नक्षत्र ⭐","तिथि 🌙","योग 🔯","वार देवता"],
+    deities:["सूर्य","चंद्र","मंगल","बुध","बृहस्पति","शुक्र","शनि"],
+    mLabels:["आर्थिक शक्ति 💰","स्वास्थ्य शक्ति 💚","वैवाहिक सुख 💕","करियर भाग्य 🚀"],
+    slotNames:["ब्राह्मी मुहूर्त 🌅","उदय लग्न","राहु काल ⚠️","यम गंड ⚠️","अभिजित मुहूर्त ✨","गुलिक काल ⚠️","सायं संध्या 🌅","निशीथ काल"],
+    slotDescs:["प्रार्थना, योग के लिए सर्वोत्तम","नए काम शुरू के लिए शुभ","महत्वपूर्ण काम न करें","महत्वपूर्ण निर्णय न लें","दिन का सबसे शुभ समय","बड़े निर्णय टालें","पूजा, ध्यान के लिए उत्तम","सामान्य कार्य के लिए उपयुक्त"],
+    goodRating:"🟢 शुभ",okRating:"🟡 सामान्य",badRating:"🔴 सावधान",
+    todayLbl:"आज",inDays:"दिन बाद",daysAgo:"दिन पहले"
+  },
+  kn:{
+    appTitle:"🕉️ ವಾಸ್ತು ಶಾಸ್ತ್ರ ಸಲಹೆಗಾರ",
+    appSub:"ಪ್ರಾಚೀನ ಭಾರತೀಯ ವಾಸ್ತು ಜ್ಞಾನ • 5000+ ವರ್ಷಗಳ ಅನುಭವ",
+    tabs:["📅 ಇಂದು","🧭 ದಿಕ್ಕು","🏠 ಕೋಣೆ","🗺️ ನಕ್ಷೆ","🧲 ದಿಕ್ಸೂಚಿ","📆 ಮಾಸಿಕ","🔮 ಗುರು"],
+    ctPanch:"📅 ಇಂದಿನ ಪಂಚಾಂಗ",ctMuhurtha:"⏰ ಶುಭ ಮುಹೂರ್ತ",
+    ctEnergy:"⚡ ವಾಸ್ತು ಶಕ್ತಿ ಸೂಚ್ಯಂಕ",ctMsg:"🌟 ಇಂದಿನ ವಾಸ್ತು ಸಂದೇಶ",
+    ctDirs:"🧭 ವಾಸ್ತು ದಿಕ್ಕುಗಳು",ctRooms:"🏠 ಕೋಣೆ ವಾಸ್ತು ಮಾರ್ಗದರ್ಶಿ",
+    ctPlan:"🗺️ ವಾಸ್ತು ಪುರುಷ ಮಂಡಲ",ctDefects:"⚠️ ವಾಸ್ತು ದೋಷ ಮತ್ತು ಪರಿಹಾರ",
+    ctCompass:"🧲 ಲೈವ್ ವಾಸ್ತು ದಿಕ್ಸೂಚಿ",ctGuru:"🔮 ವಾಸ್ತು ಗುರು ಚಾಟ್",
+    ctDirSum:"📋 ದಿಕ್ಕು ವಾಸ್ತು ಸಾರಾಂಶ",ctMonthly:"📆 ಮಾಸಿಕ ಶುಭ ಮುಹೂರ್ತ",
+    ctBestDays:"⭐ ಈ ತಿಂಗಳ ಉತ್ತಮ ದಿನಗಳು",
+    subDirs:"ದಿಕ್ಕು ಟ್ಯಾಪ್ ಮಾಡಿ",subRooms:"ಕೋಣೆ ಟ್ಯಾಪ್ ಮಾಡಿ",subPlan:"ಜೋನ್ ಟ್ಯಾಪ್ ಮಾಡಿ",
+    placeholder:"ವಾಸ್ತು ಪ್ರಶ್ನೆ ಕೇಳಿ...",todayBtn:"📅 ಇಂದು",aiBtn:"🔮 AI ಸಲಹೆ",
+    compassStart:"🧲 ದಿಕ್ಸೂಚಿ ಪ್ರಾರಂಭಿಸಿ",compassReset:"🔄 ರೀಸೆಟ್",compassInit:"ದಿಕ್ಸೂಚಿ ಪ್ರಾರಂಭಿಸಿ...",
+    askGuruBtn:"🔮 ಗುರು ಕೇಳಿ",
+    guruSub:"ಕನ್ನಡ / English ನಲ್ಲಿ ಕೇಳಿ • 🎤 ಮೈಕ್ • 🌐 Real AI",
+    guruWelcome:"ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ AI ವಾಸ್ತು ಗುರು 🙏",
+    guruLang:"Kannada",
+    tithi:["ಪ್ರತಿಪದ", "ದ್ವಿತೀಯ", "ತೃತೀಯ", "ಚತುರ್ಥಿ", "ಪಂಚಮಿ", "ಷಷ್ಠಿ", "ಸಪ್ತಮಿ", "ಅಷ್ಟಮಿ", "ನವಮಿ", "ದಶಮಿ", "ಏಕಾದಶಿ", "ದ್ವಾದಶಿ", "ತ್ರಯೋದಶಿ", "ಚತುರ್ದಶಿ", "ಹುಣ್ಣಿಮೆ"],
+    yoga:["ವಿಷ್ಕಂಭ", "ಪ್ರೀತಿ", "ಆಯುಷ್ಮಾನ", "ಸೌಭಾಗ್ಯ", "ಶೋಭನ", "ಅತಿಗಂಡ", "ಸುಕರ್ಮ", "ಧೃತಿ", "ಶೂಲ", "ಗಂಡ", "ವೃದ್ಧಿ", "ಧ್ರುವ", "ವ್ಯಾಘಾತ", "ಹರ್ಷಣ", "ವಜ್ರ", "ಸಿದ್ಧಿ", "ವ್ಯತೀಪಾತ", "ವರೀಯಾನ", "ಪರಿಘ", "ಶಿವ", "ಸಿದ್ಧ", "ಸಾಧ್ಯ", "ಶುಭ", "ಶುಕ್ಲ", "ಬ್ರಹ್ಮ", "ಇಂದ್ರ"],
+    nakshE:["ಅಶ್ವಿನಿ", "ಭರಣಿ", "ಕೃತ್ತಿಕ", "ರೋಹಿಣಿ", "ಮೃಗಶಿರ", "ಆರ್ದ್ರ", "ಪುನರ್ವಸು", "ಪುಷ್ಯಮಿ", "ಆಶ್ಲೇಷ", "ಮಘ", "ಪೂರ್ವಫಲ್ಗುನಿ", "ಉತ್ತರಫಲ್ಗುನಿ", "ಹಸ್ತ", "ಚಿತ್ತ", "ಸ್ವಾತಿ", "ವಿಶಾಖ", "ಅನುರಾಧ", "ಜ್ಯೇಷ್ಠ", "ಮೂಲ", "ಪೂರ್ವಾಷಾಢ", "ಉತ್ತರಾಷಾಢ", "ಶ್ರಾವಣ", "ಧನಿಷ್ಠ", "ಶತಭಿಷಂ", "ಪೂರ್ವಭಾದ್ರ", "ಉತ್ತರಭಾದ್ರ", "ರೇವತಿ"],
+    months:["ಜನವರಿ","ಫೆಬ್ರವರಿ","ಮಾರ್ಚ್","ಏಪ್ರಿಲ್","ಮೇ","ಜೂನ್","ಜುಲೈ","ಆಗಸ್ಟ್","ಸೆಪ್ಟೆಂಬರ್","ಅಕ್ಟೋಬರ್","ನವೆಂಬರ್","ಡಿಸೆಂಬರ್"],
+    teMonths:["ಜನ","ಫೆಬ್","ಮಾರ್","ಏಪ್ರ","ಮೇ","ಜೂನ್","ಜುಲ","ಆಗ","ಸೆಪ್","ಅಕ್ಟ","ನವ","ಡಿಸ"],
+    dayNames:["ಭಾನುವಾರ","ಸೋಮವಾರ","ಮಂಗಳವಾರ","ಬುಧವಾರ","ಗುರುವಾರ","ಶುಕ್ರವಾರ","ಶನಿವಾರ"],
+    panLabels:["ವಾರ","ದಿನಾಂಕ","ನಕ್ಷತ್ರ ⭐","ತಿಥಿ 🌙","ಯೋಗ 🔯","ವಾರ ದೇವತೆ"],
+    deities:["ಸೂರ್ಯ","ಚಂದ್ರ","ಮಂಗಳ","ಬುಧ","ಗುರು","ಶುಕ್ರ","ಶನಿ"],
+    mLabels:["ಆರ್ಥಿಕ ಶಕ್ತಿ 💰","ಆರೋಗ್ಯ ಶಕ್ತಿ 💚","ವೈವಾಹಿಕ ಸಂತೋಷ 💕","ವೃತ್ತಿ ಭಾಗ್ಯ 🚀"],
+    slotNames:["ಬ್ರಾಹ್ಮೀ ಮುಹೂರ್ತ 🌅","ಉದಯ ಲಗ್ನ","ರಾಹು ಕಾಲ ⚠️","ಯಮ ಗಂಡ ⚠️","ಅಭಿಜಿತ್ ✨","ಗುಲಿಕ ಕಾಲ ⚠️","ಸಾಯಂ ಸಂಧ್ಯ 🌅","ರಾತ್ರಿ ಕಾಲ"],
+    slotDescs:["ಪ್ರಾರ್ಥನೆ, ಧ್ಯಾನಕ್ಕೆ ಉತ್ತಮ","ಹೊಸ ಕೆಲಸ ಪ್ರಾರಂಭಿಸಲು ಶುಭ","ಮುಖ್ಯ ಕೆಲಸ ಮಾಡಬೇಡಿ","ಮುಖ್ಯ ನಿರ್ಧಾರ ತೆಗೆಯಬೇಡಿ","ದಿನದ ಅತ್ಯಂತ ಶುಭ ಸಮಯ","ದೊಡ್ಡ ನಿರ್ಧಾರ ಮುಂದೂಡಿ","ಪೂಜೆ, ಧ್ಯಾನಕ್ಕೆ ಉತ್ತಮ","ದೈನಂದಿನ ಕೆಲಸಕ್ಕೆ ಸೂಕ್ತ"],
+    goodRating:"🟢 ಶುಭ",okRating:"🟡 ಸಾಮಾನ್ಯ",badRating:"🔴 ಎಚ್ಚರ",
+    todayLbl:"ಇಂದು",inDays:"ದಿನ ನಂತರ",daysAgo:"ದಿನ ಹಿಂದೆ"
+  },
+  ta:{
+    appTitle:"🕉️ வாஸ்து சாஸ்திர ஆலோசகர்",
+    appSub:"பண்டைய இந்திய வாஸ்து அறிவு • 5000+ ஆண்டு அனுபவம்",
+    tabs:["📅 இன்று","🧭 திசைகள்","🏠 அறைகள்","🗺️ நக்சை","🧲 திசைகாட்டி","📆 மாதாந்திர","🔮 குரு"],
+    ctPanch:"📅 இன்றைய பஞ்சாங்கம்",ctMuhurtha:"⏰ சுப முகூர்த்தம்",
+    ctEnergy:"⚡ வாஸ்து சக்தி குறியீடு",ctMsg:"🌟 இன்றைய வாஸ்து செய்தி",
+    ctDirs:"🧭 வாஸ்து திசைகள்",ctRooms:"🏠 அறை வாஸ்து வழிகாட்டி",
+    ctPlan:"🗺️ வாஸ்து புருஷ மண்டலம்",ctDefects:"⚠️ வாஸ்து குறைபாடுகள்",
+    ctCompass:"🧲 நேரடி வாஸ்து திசைகாட்டி",ctGuru:"🔮 வாஸ்து குரு சேட்",
+    ctDirSum:"📋 திசை வாஸ்து சுருக்கம்",ctMonthly:"📆 மாதாந்திர சுப முகூர்த்தம்",
+    ctBestDays:"⭐ இந்த மாதம் சிறந்த நாட்கள்",
+    subDirs:"திசையை தட்டவும்",subRooms:"அறையை தட்டவும்",subPlan:"மண்டலத்தை தட்டவும்",
+    placeholder:"வாஸ்து கேள்வி கேளுங்கள்...",todayBtn:"📅 இன்று",aiBtn:"🔮 AI ஆலோசனை",
+    compassStart:"🧲 திசைகாட்டி தொடங்கு",compassReset:"🔄 மீட்டமை",compassInit:"திசைகாட்டி தொடங்குங்கள்...",
+    askGuruBtn:"🔮 குரு கேளுங்கள்",
+    guruSub:"தமிழ் / English இல் கேளுங்கள் • 🎤 மைக் • 🌐 Real AI",
+    guruWelcome:"வணக்கம்! நான் உங்கள் AI வாஸ்து குரு 🙏",
+    guruLang:"Tamil",
+    tithi:["பிரதமை", "துவிதியை", "திருதியை", "சதுர்த்தி", "பஞ்சமி", "ஷஷ்டி", "சப்தமி", "அஷ்டமி", "நவமி", "தசமி", "ஏகாதசி", "துவாதசி", "திரயோதசி", "சதுர்தசி", "பூர்ணிமை"],
+    yoga:["விஷ்கம்ப", "பிரீதி", "ஆயுஷ்மான்", "சௌபாக்ய", "சோபன", "அதிகண்ட", "சுகர்ம", "தீர்த்தி", "சூல", "கண்ட", "விருத்தி", "த்ருவ", "வியாகாத", "ஹர்ஷண", "வஜ்ர", "சித்தி", "வியதீபாத", "வரீயான்", "பரிக", "சிவ", "சித்த", "சாத்ய", "சுப", "சுக்ல", "பிரம்ம", "இந்திர"],
+    nakshE:["அஸ்வினி", "பரணி", "கிருத்திகை", "ரோகிணி", "மிருகசீரிஷம்", "திருவாதிரை", "புனர்பூசம்", "பூசம்", "ஆயில்யம்", "மகம்", "பூரம்", "உத்திரம்", "ஹஸ்தம்", "சித்திரை", "ஸ்வாதி", "விசாகம்", "அனுஷம்", "கேட்டை", "மூலம்", "பூராடம்", "உத்திராடம்", "திருவோணம்", "அவிட்டம்", "சதயம்", "பூரட்டாதி", "உத்திரட்டாதி", "ரேவதி"],
+    months:["ஜனவரி","பிப்ரவரி","மார்ச்","ஏப்ரல்","மே","ஜூன்","ஜூலை","ஆகஸ்ட்","செப்டம்பர்","அக்டோபர்","நவம்பர்","டிசம்பர்"],
+    teMonths:["ஜன","பிப்","மார்","ஏப்","மே","ஜூன்","ஜூல்","ஆக","செப்","அக்","நவ","டிச"],
+    dayNames:["ஞாயிறு","திங்கள்","செவ்வாய்","புதன்","வியாழன்","வெள்ளி","சனி"],
+    panLabels:["வாரம்","தேதி","நட்சத்திரம் ⭐","திதி 🌙","யோகம் 🔯","வார தெய்வம்"],
+    deities:["சூரியன்","சந்திரன்","செவ்வாய்","புதன்","குரு","சுக்கிரன்","சனி"],
+    mLabels:["பொருளாதார சக்தி 💰","உடல்நல சக்தி 💚","திருமண மகிழ்ச்சி 💕","தொழில் வாழ்க்கை 🚀"],
+    slotNames:["பிரும்மி முகூர்த்தம் 🌅","உதய லக்னம்","ராகு காலம் ⚠️","யம கண்டம் ⚠️","அபிஜித் ✨","குளிக காலம் ⚠️","சாயம் சந்தியா 🌅","இரவு நேரம்"],
+    slotDescs:["பிரார்த்தனை, தியானத்திற்கு சிறந்தது","புதிய காரியம் தொடங்க சுபம்","முக்கியமான வேலை செய்யாதீர்கள்","முக்கியமான முடிவு எடுக்காதீர்கள்","நாளின் மிகவும் சுபமான நேரம்","பெரிய முடிவுகளை தள்ளி வையுங்கள்","பூஜை, தியானத்திற்கு சிறந்தது","வழக்கமான பணிகளுக்கு ஏற்றது"],
+    goodRating:"🟢 சுபம்",okRating:"🟡 சாதாரணம்",badRating:"🔴 கவனம்",
+    todayLbl:"இன்று",inDays:"நாட்கள் பிறகு",daysAgo:"நாட்கள் முன்பு"
+  }
+};
+
+function getLang(){ return LANG[currentLang]||LANG.te; }
+function setEl(id,txt){ var e=document.getElementById(id); if(e) e.textContent=txt; }
+
+function setLang(lang){
+  if(!LANG[lang]) return;
+  currentLang=lang;
+  var L=getLang();
+  // Active button
+  document.querySelectorAll(".lang-btn").forEach(function(b){b.classList.remove("active-lang");});
+  var lb=document.getElementById("lang-"+lang);
+  if(lb) lb.classList.add("active-lang");
+  // Header
+  setEl("app-title",L.appTitle); setEl("app-subtitle",L.appSub);
+  // Tabs
+  var allTabs=document.querySelectorAll(".tab");
+  for(var i=0;i<L.tabs.length;i++){if(allTabs[i])allTabs[i].textContent=L.tabs[i];}
+  // Card titles
+  setEl("ct-panch",L.ctPanch); setEl("ct-muhurtha",L.ctMuhurtha);
+  setEl("ct-energy",L.ctEnergy); setEl("ct-msg",L.ctMsg);
+  setEl("ct-dirs",L.ctDirs); setEl("ct-rooms",L.ctRooms);
+  setEl("ct-plan",L.ctPlan); setEl("ct-defects",L.ctDefects);
+  setEl("ct-compass",L.ctCompass); setEl("ct-guru",L.ctGuru);
+  setEl("ct-dir-sum",L.ctDirSum); setEl("muhurtha-title",L.ctMuhurtha);
+  setEl("monthly-title",L.ctMonthly); setEl("best-days-title",L.ctBestDays);
+  // Subtitles & buttons
+  setEl("sub-dirs",L.subDirs); setEl("sub-rooms",L.subRooms); setEl("sub-plan",L.subPlan);
+  var inp=document.getElementById("chat-in"); if(inp) inp.placeholder=L.placeholder;
+  setEl("ai-muhurtha-btn",L.aiBtn);
+  setEl("today-btn",L.todayBtn);
+  var cBtn=document.getElementById("c-btn"); if(cBtn) cBtn.textContent=L.compassStart;
+  // Guru subtitle
+  var guruSubEl=document.getElementById("guru-sub"); if(guruSubEl) guruSubEl.textContent=L.guruSub;
+  // Guru welcome
+  var chatbox=document.getElementById("chat-box");
+  if(chatbox&&chatbox.querySelectorAll(".av.user").length===0){
+    var bubble=chatbox.querySelector(".bubble");
+    if(bubble) bubble.innerHTML=L.guruWelcome;
+  }
+  window.GURU_LANG=L.guruLang;
+  // Rebuild all dynamic content
+  buildMainPancha();
+  updateMuhurtha();
+}
+
+function getGuruSystem(){
+  var lang=window.GURU_LANG||"Telugu";
+  return GURU_SYSTEM.replace("speak primarily in Telugu with brief English translations","respond primarily in "+lang+" with brief English translation");
+}
+
+
+// ============ DATA ============
+const DAYS=['ఆదివారం','సోమవారం','మంగళవారం','బుధవారం','గురువారం','శుక్రవారం','శనివారం'];
+const NAKSH=[{t:'అశ్వని',e:'Ashwini'},{t:'భరణి',e:'Bharani'},{t:'కృత్తిక',e:'Krittika'},{t:'రోహిణి',e:'Rohini'},{t:'మృగశిర',e:'Mrigashira'},{t:'ఆర్ద్ర',e:'Ardra'},{t:'పునర్వసు',e:'Punarvasu'},{t:'పుష్యమి',e:'Pushyami'},{t:'ఆశ్లేష',e:'Ashlesha'},{t:'మఖ',e:'Magha'},{t:'పూర్వఫల్గుని',e:'Purva Phalguni'},{t:'ఉత్తరఫల్గుని',e:'Uttara Phalguni'},{t:'హస్త',e:'Hasta'},{t:'చిత్త',e:'Chitra'},{t:'స్వాతి',e:'Swati'},{t:'విశాఖ',e:'Vishakha'},{t:'అనూరాధ',e:'Anuradha'},{t:'జ్యేష్ఠ',e:'Jyeshtha'},{t:'మూల',e:'Mula'},{t:'పూర్వాషాఢ',e:'Purva Ashadha'},{t:'ఉత్తరాషాఢ',e:'Uttara Ashadha'},{t:'శ్రావణ',e:'Shravana'},{t:'ధనిష్ఠ',e:'Dhanishtha'},{t:'శతభిషం',e:'Shatabhisha'},{t:'పూర్వభాద్ర',e:'Purva Bhadra'},{t:'ఉత్తరభాద్ర',e:'Uttara Bhadra'},{t:'రేవతి',e:'Revati'}];
+const TITHI=['పాడ్యమి','విదియ','తదియ','చవితి','పంచమి','షష్ఠి','సప్తమి','అష్టమి','నవమి','దశమి','ఏకాదశి','ద్వాదశి','త్రయోదశి','చతుర్దశి','పౌర్ణమి'];
+const YOGA=['విష్కంభ','ప్రీతి','ఆయుష్మాన్','సౌభాగ్య','శోభన','అతిగండ','సుకర్మ','ధ్రుతి','శూల','గండ','వృద్ధి','ధ్రువ','వ్యాఘాత','హర్షణ','వజ్ర','సిద్ధి','వ్యతీపాత','వరీయాన్','పరిఘ','శివ','సిద్ధ','సాధ్య','శుభ','శుక్ల','బ్రహ్మ','ఇంద్ర'];
+
+// VARA_DATA: base messages per weekday
+const VARA_DATA={
+  0:{msg_te:"ఆదివారం — సూర్య వాసరం. తూర్పు భాగంలో దీపం వెలిగించండి. నారింజ/ఎరుపు రంగు వస్త్రాలు శుభం.",msg_en:"Sunday - Sun's day. Light lamp facing East. Wear orange or red.",energy:[85,70,75,80]},
+  1:{msg_te:"సోమవారం — చంద్ర వాసరం. ఉత్తర దిశలో నీటి కుండ ఉంచండి. తెలుపు రంగు శుభం.",msg_en:"Monday - Moon's day. Keep water vessel in North. White color auspicious.",energy:[75,85,65,70]},
+  2:{msg_te:"మంగళవారం — మంగళ వాసరం. దక్షిణ దిశలో దీపం వెలిగించండి. ఎరుపు రంగు శుభం.",msg_en:"Tuesday - Mars day. Light lamp in South. Red color auspicious.",energy:[60,65,80,85]},
+  3:{msg_te:"బుధవారం — బుధ వాసరం. ఉత్తరంలో మొక్కలు పెట్టండి. పసుపు/ఆకుపచ్చ రంగు శుభం.",msg_en:"Wednesday - Mercury day. Place plants in North. Yellow or green auspicious.",energy:[80,75,70,90]},
+  4:{msg_te:"గురువారం — బృహస్పతి వాసరం. ఈశాన్యంలో పూజ చేయండి. పసుపు రంగు శుభం.",msg_en:"Thursday - Jupiter day. Worship in NE. Yellow color very auspicious.",energy:[90,80,85,95]},
+  5:{msg_te:"శుక్రవారం — శుక్ర వాసరం. ఇంటిలో సుగంధ ద్రవ్యాలు వేయండి. తెలుపు/గులాబీ రంగు శుభం.",msg_en:"Friday - Venus day. Use fragrances at home. White or pink color auspicious.",energy:[85,75,95,80]},
+  6:{msg_te:"శనివారం — శని వాసరం. నూనె దీపం వెలిగించండి. నీలం/నలుపు రంగు జాగ్రత్తగా వాడండి.",msg_en:"Saturday - Saturn day. Light oil lamp. Use blue or black carefully.",energy:[65,70,60,75]}
+};
+
+// Get date-specific energy values — varies per actual calendar date
+function getDateEnergy(d) {
+  const base = VARA_DATA[d.getDay()].energy;
+  const seed = d.getDate() * 7 + d.getMonth() * 31; // unique per date
+  return base.map((v,i) => {
+    const shift = ((seed * (i+3)) % 21) - 10; // ±10 variation
+    return Math.min(99, Math.max(45, v + shift));
+  });
+}
+
+// Get date-specific message
+function getDateMsg(d, lang) {
+  const vara = VARA_DATA[d.getDay()];
+  return lang === 'en' ? vara.msg_en : vara.msg_te;
+}
+
+// ============ INIT ============
+const now = new Date();
+const dow = now.getDay();
+const months = getLang().months || ['జనవరి','ఫిబ్రవరి','మార్చి','ఏప్రిల్','మే','జూన్','జులై','ఆగస్ట్','సెప్టెంబర్','అక్టోబర్','నవంబర్','డిసెంబర్'];
+const vara = VARA_DATA[dow];
+const nakIdx = (now.getDate() + now.getMonth()*3) % 27;
+const titIdx = (now.getDate() + now.getMonth()*3) % 15;
+const yogIdx = (now.getDate() + now.getMonth()*3) % 26;
+
+// ============ DIRECTION DATA ============
+const DIR_DATA={
+  N:{name:'ఉత్తర దిశ',good:true,god:'కుబేర',elem:'జలం 💧',color:'ఆకుపచ్చ, నీలం',
+    te:'కుబేర (సంపద దేవుడు) మహారాజు దిశ. స్టడీ రూమ్, నీటి వనరు, ట్రెజరీ ఇక్కడ ఉంటే సంపద వృద్ధి.',
+    en:'North = Kubera (God of Wealth). Ideal for study room, treasury, water features.',
+    rem:['ఉత్తరంలో నీటి ఫౌంటెన్ ఉంచండి','ఆకుపచ్చ మొక్కలు పెట్టండి','కిటికీలు ఎక్కువగా ఉంచండి','లాకర్/తిజోరీ ఇక్కడ ఉంచండి']},
+  NE:{name:'ఈశాన్య దిశ (ఉత్తర-తూర్పు మూల)',good:true,god:'శివుడు',elem:'ఆకాశం',color:'తెలుపు, పసుపు',
+    te:'దైవ శక్తి కేంద్రం. పూజ గది, ధ్యాన కేంద్రం ఇక్కడ ఉండాలి. ఎల్లప్పుడూ పరిశుభ్రంగా ఉంచాలి.',
+    en:'Divine energy center. Ideal for prayer room, meditation. Always keep clean.',
+    rem:['పూజ గది ఇక్కడ ఉంచండి','ఎల్లప్పుడూ పరిశుభ్రంగా ఉంచండి','దీపం వెలిగించండి','Toilet ఉంచవద్దు']},
+  E:{name:'తూర్పు దిశ',good:true,god:'ఇంద్ర',elem:'సూర్యుడు ☀️',color:'తెలుపు, లేత ఆకుపచ్చ',
+    te:'ఇంద్ర భగవానుని దిశ. ఆరోగ్యం, కీర్తి కి శ్రేష్ఠం. ముఖద్వారం తూర్పుగా ఉంటే అత్యుత్తమం.',
+    en:'East = Indra. Best for health and fame. Main entrance facing East is ideal.',
+    rem:['ముఖద్వారం తూర్పుగా ఉంచండి','ఎక్కువ కిటికీలు తూర్పున ఉంచండి','పెద్ద చెట్లు పెట్టవద్దు','ఉదయం కిటికీలు తెరవండి']},
+  SE:{name:'ఆగ్నేయ దిశ (దక్షిణ-తూర్పు మూల)',good:true,god:'అగ్ని',elem:'అగ్ని 🔥',color:'నారింజ, ఎరుపు',
+    te:'అగ్ని దేవుని దిశ. వంటగది, Generator, Electrical ఇక్కడ ఉంటే శ్రేష్ఠం.',
+    en:'Southeast = Agni (Fire). Ideal for kitchen, generator, electrical equipment.',
+    rem:['వంటగది SE లో ఉంచండి','తూర్పు ముఖంగా వండండి','Generator/Inverter SE లో','అగ్ని వస్తువులు SE లో']},
+  S:{name:'దక్షిణ దిశ',good:false,god:'యముడు',elem:'భూమి',color:'గులాబీ, కోరల్',
+    te:'యముని దిశ. భారీ వస్తువులు, Master bedroom ఇక్కడ ఉంచవచ్చు. ద్వారాలు తక్కువగా ఉంచాలి.',
+    en:'South = Yama. Heavy storage, master bedroom suitable. Minimize openings.',
+    rem:['దక్షిణ గోడ దృఢంగా ఉంచండి','కిటికీలు తక్కువగా ఉంచండి','Master bedroom ఇక్కడ ఉంచవచ్చు','Hanuman photo ద్వారంలో అతికించండి']},
+  SW:{name:'నైఋతి దిశ (దక్షిణ-పశ్చిమ మూల)',good:false,god:'శక్తి',elem:'భూమి',color:'పసుపు, అర్థ్-పసుపు',
+    te:'గృహస్వామి శక్తి స్థానం. Master bedroom, heavy storage ఇక్కడ ఉంటే stability వస్తుంది.',
+    en:'SW = Master of the house. Master bedroom and heavy storage here for stability.',
+    rem:['Master bedroom SW లో ఉంచండి','Heavy furniture SW లో','నీటి వనరులు SW లో వద్దు','Staircase ఇక్కడ వద్దు']},
+  W:{name:'పశ్చిమ దిశ',good:true,god:'వరుణ',elem:'జలం',color:'నీలం, grey',
+    te:'వరుణ దేవుని దిశ. Dining room, Study room పశ్చిమంలో శ్రేష్ఠం. Business కి అనుకూలం.',
+    en:'West = Varuna. Ideal for dining, study. Good for business and stability.',
+    rem:['Dining room పశ్చిమంలో ఉంచండి','కిటికీలు తక్కువగా ఉంచండి','Children room పశ్చిమంలో','Study room పశ్చిమంలో ఉంచవచ్చు']},
+  NW:{name:'వాయవ్య దిశ (ఉత్తర-పశ్చిమ మూల)',good:true,god:'వాయు',elem:'వాయువు 💨',color:'తెలుపు, లేత నీలం',
+    te:'వాయు దేవుని దిశ. Guest room, Garage, Bathroom ఇక్కడ అనుకూలం. Guests వస్తారు, వెళ్తారు.',
+    en:'NW = Vayu (Air). Guest room, garage, bathroom suitable here.',
+    rem:['Guest room NW లో ఉంచండి','Garage NW లో అనుకూలం','Septic tank NW లో ఉంచండి','Bathroom NW లో అనుకూలం']}
+};
+
+// ============ ROOMS DATA ============
+const ROOMS=[
+  {ico:'🚪',te:'ప్రధాన ద్వారం',en:'Main Door',
+    te_info:'ప్రధాన ద్వారం తూర్పు లేదా ఉత్తరంగా ఉంచండి. ఇంటికి శక్తి, సంపద ఇక్కడి నుండి ప్రవేశిస్తుంది.',
+    en_info:'Main door facing East or North brings health, wealth and positive energy.',
+    rem:['తూర్పు/ఉత్తరం వైపు ఉండాలి','ద్వారం ముందు రంగవల్లి వేయండి','దీపం ప్రతిరోజూ వెలిగించండి']},
+  {ico:'🛏️',te:'పడక గది',en:'Bedroom',
+    te_info:'Master bedroom నైఋతి (SW) లో ఉంచండి. తల దక్షిణంగా లేదా తూర్పుగా పెట్టి నిద్రించండి.',
+    en_info:'Master bedroom in SW. Sleep with head towards South or East for best rest.',
+    rem:['SW కోణంలో ఉంచండి','తల దక్షిణంగా నిద్రించండి','Mirror మంచంకు ఎదురుగా వేయవద్దు']},
+  {ico:'🍳',te:'వంటగది',en:'Kitchen',
+    te_info:'వంటగది SE లో ఉంచండి. తూర్పు ముఖంగా వండాలి. Sink మరియు Stove పక్కపక్కన వద్దు.',
+    en_info:'Kitchen in SE, cook facing East. Never place sink and stove adjacent.',
+    rem:['SE కోణంలో ఉంచండి','తూర్పు ముఖంగా వండండి','Sink-Stove పక్కపక్కన వద్దు']},
+  {ico:'🚿',te:'బాత్రూమ్',en:'Bathroom',
+    te_info:'Bathroom NW లేదా West లో ఉంచండి. ఈశాన్యం (NE) లో Toilet అత్యంత దోషం.',
+    en_info:'Bathroom in NW or West is ideal. Never place toilet in NE corner.',
+    rem:['NW లేదా West లో ఉంచండి','NE లో toilet వద్దు','Sea salt mopping చేయండి']},
+  {ico:'🙏',te:'పూజ గది',en:'Prayer Room',
+    te_info:'పూజ గది ఈశాన్యం (NE) లో ఉంచండి. తూర్పు ముఖంగా పూజ చేయండి.',
+    en_info:'Prayer room in NE corner. Face East while praying. Keep always clean.',
+    rem:['NE కోణంలో ఉంచండి','తూర్పు ముఖంగా పూజ చేయండి','రోజూ దీపం వెలిగించండి']},
+  {ico:'🛋️',te:'లివింగ్ రూమ్',en:'Living Room',
+    te_info:'లివింగ్ రూమ్ ఉత్తరం లేదా తూర్పులో ఉంచండి. Sofa దక్షిణ గోడకు ఆనించి పెట్టండి.',
+    en_info:'Living room in North or East. Sofa against South or West wall.',
+    rem:['ఉత్తరం/తూర్పులో ఉంచండి','Sofa SW గోడకు ఆనించండి','Center ఖాళీగా ఉంచండి']},
+  {ico:'🍽️',te:'డైనింగ్ రూమ్',en:'Dining Room',
+    te_info:'Dining room పశ్చిమంలో ఉంచండి. తూర్పు ముఖంగా భోజనం చేయండి.',
+    en_info:'Dining room in West. Sit facing East for meals. Bright lighting essential.',
+    rem:['పశ్చిమంలో ఉంచండి','తూర్పు ముఖంగా భోజనం','Square table వాడండి']},
+  {ico:'📚',te:'స్టడీ రూమ్',en:'Study Room',
+    te_info:'Study room ఉత్తరం లేదా తూర్పులో ఉంచండి. తూర్పు ముఖంగా చదవాలి.',
+    en_info:'Study room in North or East. Face East while studying for best concentration.',
+    rem:['ఉత్తరం/తూర్పులో ఉంచండి','తూర్పు ముఖంగా చదవండి','సరస్వతి photo ఉత్తర గోడకు']}
+];
+
+// ============ ZONES (Vastu Purusha Mandala) ============
+const ZONES=[
+  {key:'NE',te:'ఈశాన్యం',dir:'NE',ico:'🙏',z:'zone-good'},
+  {key:'N',te:'ఉత్తరం',dir:'N',ico:'💰',z:'zone-good'},
+  {key:'NW',te:'వాయవ్యం',dir:'NW',ico:'💨',z:'zone-good'},
+  {key:'E',te:'తూర్పు',dir:'E',ico:'🌅',z:'zone-good'},
+  {key:'C',te:'బ్రహ్మస్థానం',dir:'Center',ico:'🕉️',z:'zone-neutral'},
+  {key:'W',te:'పశ్చిమం',dir:'W',ico:'📚',z:'zone-good'},
+  {key:'SE',te:'ఆగ్నేయం',dir:'SE',ico:'🔥',z:'zone-good'},
+  {key:'S',te:'దక్షిణం',dir:'S',ico:'⚠️',z:'zone-warn'},
+  {key:'SW',te:'నైఋతి',dir:'SW',ico:'💪',z:'zone-warn'}
+];
+
+// ============ DEFECTS ============
+const DEFECTS=[
+  {te:'ఈశాన్యంలో (NE) Toilet — అత్యంత దోషం', rem:'Sea salt mopping, blue light, money plant పెట్టండి'},
+  {te:'దక్షిణంగా ముఖ ద్వారం', rem:'Hanuman photo, bright light, red color వేయండి'},
+  {te:'వంటగది ఉత్తరంలో', rem:'SE కి move చేయండి లేదా green color వేయండి'},
+  {te:'Master bedroom ఈశాన్యంలో', rem:'SW కి move చేయండి. Bedroom లో heavy items SW లో ఉంచండి'},
+  {te:'పూజ గది దక్షిణంలో', rem:'NE కి move చేయండి. Temporary: small idol NE corner లో ఉంచండి'},
+  {te:'మెట్లు ఈశాన్యంలో', rem:'Red light, crystal, salt remedies వాడండి'},
+  {te:'Overhead Tank ఈశాన్యంలో', rem:'SW లేదా West కి move చేయండి. Immediate: blue color వేయండి'},
+  {te:'Broken/Cracked walls', rem:'వెంటనే fix చేయండి — negative energy source'}
+];
+
+
+
+
+
+function buildMainPancha() {
+  var LL = getLang();
+  var pl = LL.panLabels;
+  var de = LL.deities;
+  // Use language-specific day, nakshatra, tithi, yoga values
+  var dayVal   = LL.dayNames ? LL.dayNames[dow] : DAYS[dow];
+  var dayEn    = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow];
+  var nakVal   = LL.nakshE  ? LL.nakshE[nakIdx]  : NAKSH[nakIdx].t;
+  var nakSub   = NAKSH[nakIdx].e;
+  var tithiVal = LL.tithi   ? LL.tithi[titIdx]   : TITHI[titIdx];
+  var yogaVal  = LL.yoga    ? LL.yoga[yogIdx]    : YOGA[yogIdx];
+  var dateVal  = now.getDate() + ' ' + (LL.months ? LL.months[now.getMonth()] : months[now.getMonth()]);
+  var items=[
+    {lbl:pl[0], val:dayVal,   sub:dayEn},
+    {lbl:pl[1], val:dateVal,  sub:now.getFullYear()},
+    {lbl:pl[2], val:nakVal,   sub:nakSub},
+    {lbl:pl[3], val:tithiVal, sub:'Tithi'},
+    {lbl:pl[4], val:yogaVal,  sub:'Yoga'},
+    {lbl:pl[5], val:de[dow],  sub:'Ruling Deity'}
+  ];
+  var pEl = document.getElementById('pancha');
+  if(pEl) pEl.innerHTML = items.map(function(i){return '<div class="pancha-item"><div class="pancha-sub">'+i.lbl+'</div><div class="pancha-val">'+i.val+'</div><div class="pancha-sub">'+i.sub+'</div></div>';}).join('');
+}
+buildMainPancha();
+
+// ---- RAHU KALAM per weekday (start hour) ----
+const RAHU_SLOTS={0:[16.5,18],1:[7.5,9],2:[15,16.5],3:[12,13.5],4:[13.5,15],5:[10.5,12],6:[9,10.5]};
+const YAMA_SLOTS={0:[12,13.5],1:[10.5,12],2:[9,10.5],3:[7.5,9],4:[6,7.5],5:[15,16.5],6:[13.5,15]};
+const GULIKA_SLOTS={0:[13.5,15],1:[12,13.5],2:[10.5,12],3:[9,10.5],4:[7.5,9],5:[6,7.5],6:[15,16.5]};
+const ABHIJIT_BY_DOW={0:'11:48–12:36',1:'11:44–12:32',2:'11:44–12:32',3:'11:44–12:32',4:'11:44–12:32',5:'11:44–12:32',6:'11:48–12:36'};
+
+function fmtHour(h){
+  const hh=Math.floor(h), mm=Math.round((h-hh)*60);
+  return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+}
+
+function buildMuhurthaSlots(d) {
+  const dw = d.getDay();
+  const dn = d.getDate() + d.getMonth()*3;
+  const nk = NAKSH[dn%27]; const ti = TITHI[dn%15];
+  const rahu = RAHU_SLOTS[dw]; const yama = YAMA_SLOTS[dw]; const guli = GULIKA_SLOTS[dw];
+  const abhi = ABHIJIT_BY_DOW[dw];
+  const vara2 = VARA_DATA[dw];
+
+  // Bad tithis for certain activities
+  const badTithi = [3,7,12].includes(dn%15); // Chaturthi, Ashtami, Trayodashi
+
+  var SN = getLang().slotNames || [];
+  var SD = getLang().slotDescs || [];
+  var fallN = ['బ్రాహ్మీ ముహూర్తం 🌅','ఉదయ లగ్నం','రాహు కాలం ⚠️','యమ గండం ⚠️','అభిజిత్ ✨','గులిక కాలం ⚠️','సాయం సంధ్య 🌅','నిశీధి కాలం'];
+  var fallD = ['ప్రార్థన, ధ్యానానికి మంచిది','కొత్త పని ప్రారంభానికి శుభం','ముఖ్య పనులు చేయవద్దు','ముఖ్యమైన నిర్ణయాలు వద్దు','అన్ని శుభ కార్యాలకు అనుకూలం','నిర్ణయాలు వాయిదా వేయండి','పూజ, ధ్యానానికి మంచి సమయం','సాధారణ పనులకు అనుకూలం'];
+  const slots=[
+    {time:'05:00 – 06:00', name:SN[0]||fallN[0], cls:'good', te:SD[0]||fallD[0]},
+    {time:'06:00 – 07:30', name:SN[1]||fallN[1], cls:'good', te:SD[1]||fallD[1]},
+    {time:fmtHour(rahu[0])+' – '+fmtHour(rahu[1]), name:SN[2]||fallN[2], cls:'bad',  te:SD[2]||fallD[2]},
+    {time:fmtHour(yama[0])+' – '+fmtHour(yama[1]), name:SN[3]||fallN[3], cls:'bad',  te:SD[3]||fallD[3]},
+    {time:abhi, name:SN[4]||fallN[4], cls:'good', te:SD[4]||fallD[4]},
+    {time:fmtHour(guli[0])+' – '+fmtHour(guli[1]), name:SN[5]||fallN[5], cls:'bad',  te:SD[5]||fallD[5]},
+    {time:'17:30 – 18:30', name:SN[6]||fallN[6], cls:'good', te:SD[6]||fallD[6]},
+    {time:'19:00 – 21:00', name:SN[7]||fallN[7], cls:'ok',   te:SD[7]||fallD[7]}
+  ];
+
+  const badNaks = ['ఆర్ద్ర','మూల','అశ్లేష','జ్యేష్ఠ'];
+  const nkWarn = badNaks.includes(nk.t);
+  const LL2 = getLang();
+  const nakDisplay = LL2.nakshE ? LL2.nakshE[dn%27] : nk.t;
+  const tithiDisplay = LL2.tithi ? LL2.tithi[dn%15] : ti;
+  const warnLabel   = currentLang === 'en' ? 'Warning' : currentLang === 'hi' ? 'चेतावनी' : currentLang === 'kn' ? 'ಎಚ್ಚರಿಕೆ' : currentLang === 'ta' ? 'எச்சரிக்கை' : 'హెచ్చరిక';
+  const nakLabel    = currentLang === 'en' ? 'Nakshatra Warning' : currentLang === 'hi' ? 'नक्षत्र चेतावनी' : currentLang === 'kn' ? 'ನಕ್ಷತ್ರ ಎಚ್ಚರಿಕೆ' : currentLang === 'ta' ? 'நட்சத்திர எச்சரிக்கை' : 'నక్షత్ర హెచ్చరిక';
+  const tithiLabel  = currentLang === 'en' ? 'Tithi Warning' : currentLang === 'hi' ? 'तिथि चेतावनी' : currentLang === 'kn' ? 'ತಿಥಿ ಎಚ್ಚರಿಕೆ' : currentLang === 'ta' ? 'திதி எச்சரிக்கை' : 'తిథి హెచ్చరిక';
+  const nakWarnDesc = currentLang === 'en' ? `${nk.e} nakshatra — avoid auspicious activities` : currentLang === 'hi' ? `${nk.e} नक्षत्र — शुभ कार्य न करें` : `${nakDisplay} నక్షత్రం — శుభకార్యాలు వద్దు`;
+  const tithiWarnDesc = currentLang === 'en' ? 'This tithi is inauspicious for some activities' : currentLang === 'hi' ? 'यह तिथि कुछ कार्यों के लिए अशुभ है' : 'ఈ తిథి కొన్ని కార్యాలకు అనుకూలం కాదు';
+  let extra = '';
+  if(nkWarn) extra += `<div class="slot bad"><div class="slot-time">${nakLabel}</div><div class="slot-name">⚠️ ${nakDisplay}</div><div class="slot-desc">${nakWarnDesc}</div></div>`;
+  if(badTithi) extra += `<div class="slot bad"><div class="slot-time">${tithiLabel}</div><div class="slot-name">⚠️ ${tithiDisplay}</div><div class="slot-desc">${tithiWarnDesc}</div></div>`;
+
+  // Date header for the selected date
+  const months4=getLang().teMonths||['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const teMonths=getLang().teMonths||['జన','ఫిబ్ర','మార్చి','ఏప్రి','మే','జూన్','జులై','ఆగ','సెప్','అక్టో','నవ','డిసె'];
+  const dNames4=getLang().dayNames||['ఆదివారం','సోమవారం','మంగళవారం','బుధవారం','గురువారం','శుక్రవారం','శనివారం'];
+  const dateHeader = `<div style="background:rgba(212,160,23,0.12);border:1px solid rgba(212,160,23,0.3);border-radius:8px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:15px;color:#F5C842;">📅 ${d.getDate()} ${teMonths[d.getMonth()]} ${d.getFullYear()}</span>
+    <span style="font-size:13px;color:rgba(253,246,227,0.6);">${d.getDate()} ${months4[d.getMonth()]} ${d.getFullYear()} • ${dNames4[dw]}</span>
+  </div>`;
+
+  // Date label for each slot
+  var dLabel = d.getDate() + ' ' + (getLang().teMonths||['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'])[d.getMonth()] + ' ' + d.getFullYear();
+  return dateHeader + slots.map(s=>`<div class="slot ${s.cls}">
+    <div class="slot-time">${s.time} <span style="font-size:10px;opacity:0.55;margin-left:4px;">${dLabel}</span></div>
+    <div class="slot-name">${s.name}</div>
+    <div class="slot-desc">${s.te}</div>
+  </div>`).join('') + extra;
+}
+
+function buildSelPancha(d) {
+  var LL = getLang();
+  var pl = LL.panLabels;
+  const dw=d.getDay(), dn=d.getDate()+d.getMonth()*3;
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const deities = LL.deities;
+  const nk=NAKSH[dn%27], ti=TITHI[dn%15], yo=YOGA[dn%26];
+  var dayStr  = LL.dayNames ? LL.dayNames[dw] : DAYS[dw];
+  var nakStr  = LL.nakshE  ? LL.nakshE[dn%27]  : nk.t;
+  var tithStr = LL.tithi   ? LL.tithi[dn%15]   : ti;
+  var yogStr  = LL.yoga    ? LL.yoga[dn%26]    : yo;
+  return [
+    '📅 <b>'+dayStr+'</b> ('+dayNames[dw]+')',
+    '⭐ '+pl[2]+': <b>'+nakStr+'</b> ('+nk.e+')',
+    '🌙 '+pl[3]+': <b>'+tithStr+'</b>',
+    '🔯 '+pl[4]+': <b>'+yogStr+'</b>',
+    '🕉️ '+pl[5]+': <b>'+deities[dw]+'</b>'
+  ].map(function(x){return '<span style="background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.2);border-radius:6px;padding:4px 8px;">'+x+'</span>';}).join('');
+}
+function updateMuhurtha() {
+  const inp = document.getElementById('muhurtha-date');
+  const d = inp.value ? new Date(inp.value+'T00:00:00') : new Date();
+  const dw = d.getDay();
+  const vara2 = VARA_DATA[dw];
+
+  // Update muhurtha slots + panchanga
+  document.getElementById('muhurtha').innerHTML = buildMuhurthaSlots(d);
+  document.getElementById('sel-pancha').innerHTML = buildSelPancha(d);
+
+  // Update daily message for selected date
+  const dailyMsg = document.getElementById('daily-msg');
+  if(dailyMsg) dailyMsg.innerHTML = `<p>${getDateMsg(d, currentLang)}</p><small>${vara2.msg_en}</small>`;
+
+  // Update energy meters for selected date
+  var mLabels = getLang().mLabels ||  ['ఆర్థిక శక్తి 💰','ఆరోగ్య శక్తి 💚','వైవాహిక సంతోషం 💕','కెరీర్ సౌభాగ్యం 🚀'];
+  const mColors=['#D4A017','#2D6A2D','#D4587A','#E8651A'];
+  const mVals = getDateEnergy(d);
+  const metersEl = document.getElementById('meters');
+  if(metersEl) {
+    metersEl.innerHTML = mLabels.map((l,i)=>`
+    <div class="meter-row">
+      <div class="meter-lbl">${l} — ${mVals[i]}%</div>
+      <div class="meter-bar"><div class="meter-fill" style="width:0%;background:${mColors[i]}" data-w="${mVals[i]}"></div></div>
+    </div>`).join('');
+    setTimeout(()=>metersEl.querySelectorAll('.meter-fill').forEach(m=>m.style.width=m.dataset.w+'%'),100);
+  }
+
+  // Update panchanga card (top)
+  const dn = d.getDate() + d.getMonth()*3;
+  const months3=getLang().months||['జనవరి','ఫిబ్రవరి','మార్చి','ఏప్రిల్','మే','జూన్','జులై','ఆగస్ట్','సెప్టెంబర్','అక్టోబర్','నవంబర్','డిసెంబర్'];
+  const dayNamesEN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const deities=['సూర్యుడు','చంద్రుడు','మంగళుడు','బుధుడు','బృహస్పతి','శుక్రుడు','శనిశ్చర'];
+  const items2=[
+    {lbl:'వారం',val:DAYS[dw],sub:dayNamesEN[dw]},
+    {lbl:'తేదీ',val:d.getDate()+' '+months3[d.getMonth()],sub:d.getFullYear()},
+    {lbl:'నక్షత్రం (star ⭐)',val:NAKSH[dn%27].t,sub:NAKSH[dn%27].e},
+    {lbl:'తిథి (చంద్రుని రోజు 🌙)',val:TITHI[dn%15],sub:'Tithi'},
+    {lbl:'యోగం (రోజు స్వభావం 🔯)',val:YOGA[dn%26],sub:'Yoga'},
+    {lbl:'వారం దేవత',val:deities[dw],sub:'Ruling Deity'}
+  ];
+  const panchaEl = document.getElementById('pancha');
+  if(panchaEl) panchaEl.innerHTML = items2.map(i=>`<div class="pancha-item"><div class="pancha-sub">${i.lbl}</div><div class="pancha-val">${i.val}</div><div class="pancha-sub">${i.sub}</div></div>`).join('');
+
+  // Update title dynamically based on selected date
+  const today = new Date(); today.setHours(0,0,0,0);
+  const sel = new Date(d); sel.setHours(0,0,0,0);
+  const diffDays = Math.round((sel-today)/(1000*60*60*24));
+  const titleEl = document.getElementById('muhurtha-title');
+  if(titleEl) {
+    if(diffDays === 0)       titleEl.textContent = '⏰ నేటి శుభ ముహూర్తాలు (శుభ సమయాలు) — Today';
+    else if(diffDays === 1)  titleEl.textContent = '⏰ రేపటి శుభ ముహూర్తాలు (శుభ సమయాలు) — Tomorrow';
+    else if(diffDays === -1) titleEl.textContent = '⏰ నిన్నటి శుభ ముహూర్తాలు (శుభ సమయాలు) — Yesterday';
+    else if(diffDays > 1)    titleEl.textContent = getLang().ctMuhurtha+' — '+diffDays+' '+(getLang().inDays||'days ahead');
+    else                     titleEl.textContent = getLang().ctMuhurtha + ' — ' + Math.abs(diffDays) + ' ' + (getLang().daysAgo||'days ago');
+  }
+  document.getElementById('ai-muhurtha-result').style.display='none';
+}
+
+function setToday() {
+  const d = new Date();
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+  document.getElementById('muhurtha-date').value=`${y}-${m}-${dd}`;
+  updateMuhurtha();
+}
+
+async function checkAI() {
+  const inp = document.getElementById('muhurtha-date');
+  const d = inp.value ? new Date(inp.value+'T00:00:00') : new Date();
+  const dw = d.getDay();
+  const dn = d.getDate() + d.getMonth()*3;
+  const nk = NAKSH[dn%27];
+  const ti = TITHI[dn%15];
+  const yo = YOGA[dn%26];
+  const months2=['జనవరి','ఫిబ్రవరి','మార్చి','ఏప్రిల్','మే','జూన్','జులై','ఆగస్ట్','సెప్టెంబర్','అక్టోబర్','నవంబర్','డిసెంబర్'];
+  const dNames=getLang().dayNames||['ఆదివారం','సోమవారం','మంగళవారం','బుధవారం','గురువారం','శుక్రవారం','శనివారం'];
+  const dateStr = `${d.getDate()} ${months2[d.getMonth()]} ${d.getFullYear()} (${dNames[dw]})`;
+  const question = `తేదీ: ${dateStr}
+నక్షత్రం (మీరు పుట్టిన star ⭐): ${nk.t}
+తిథి (చంద్రుని ప్రకారం రోజు 🌙): ${ti}
+యోగం (రోజు స్వభావం 🔯): ${yo}
+
+ఈ రోజు వాస్తు శుభ ముహూర్తాలు (శుభ సమయాలు), చేయవలసిన పనులు మరియు వర్జించవలసినవి వివరంగా చెప్పండి.`;
+  askGuru(question);
+}
+
+
+// Init: set today's date and build muhurtha
+(function(){
+  const d=new Date();
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+  document.getElementById('muhurtha-date').value=`${y}-${m}-${dd}`;
+  document.getElementById('muhurtha').innerHTML = buildMuhurthaSlots(d);
+  document.getElementById('sel-pancha').innerHTML = buildSelPancha(d);
+})();
+
+// Meters
+var mLabels = getLang().mLabels ||  ['ఆర్థిక శక్తి 💰','ఆరోగ్య శక్తి 💚','వైవాహిక సంతోషం 💕','కెరీర్ సౌభాగ్యం 🚀'];
+const mColors=['#D4A017','#2D6A2D','#D4587A','#E8651A'];
+const mVals=vara.energy;
+document.getElementById('meters').innerHTML = mLabels.map((l,i)=>`
+<div class="meter-row">
+  <div class="meter-lbl">${l} — ${mVals[i]}%</div>
+  <div class="meter-bar"><div class="meter-fill" style="width:0%;background:${mColors[i]}" data-w="${mVals[i]}"></div></div>
+</div>`).join('');
+setTimeout(()=>document.querySelectorAll('.meter-fill').forEach(m=>m.style.width=m.dataset.w+'%'),200);
+
+// Daily msg
+document.getElementById('daily-msg').innerHTML=`<p>${vara.msg_te}</p><small>${vara.msg_en}</small>`;
+
+// Rooms
+document.getElementById('room-grid').innerHTML = ROOMS.map((r,i)=>`<button class="room-btn" onclick="showRoom(${i},this)"><span class="room-ico">${r.ico}</span>${r.te}<br><small style="font-size:10px;opacity:0.6">${r.en}</small></button>`).join('');
+
+// House Grid
+document.getElementById('house-grid').innerHTML = ZONES.map((z,i)=>`<div class="zone ${z.z}" onclick="showZone('${z.key}')"><div class="z-ico">${z.ico}</div><div class="z-te">${z.te}</div><div class="z-dir">${z.dir}</div></div>`).join('');
+
+// Defects
+document.getElementById('defects').innerHTML = DEFECTS.map(d=>`<div style="margin-bottom:10px;padding:10px;background:rgba(139,37,0,0.15);border:1px solid rgba(139,37,0,0.3);border-radius:8px;"><div style="font-size:15px;margin-bottom:4px;">⚠️ ${d.te}</div><div style="font-size:12px;color:rgba(253,246,227,0.65);">${d.rem}</div></div>`).join('');
+
+// ============ FUNCTIONS ============
+function switchTab(id, el) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  if(id === 'monthly') {
+    const d = new Date();
+    buildMonthCalendar(d.getFullYear(), d.getMonth() + currentMonthOffset);
+  }
+}
+
+function showDir(key, btn) {
+  document.querySelectorAll('.dir-btn').forEach(b=>b.classList.remove('sel'));
+  if(btn) btn.classList.add('sel');
+  const d = DIR_DATA[key];
+  if(!d) return;
+  const box = document.getElementById('dir-result');
+  box.className = 'result-box show ' + (d.good?'good':'warn');
+  box.innerHTML = `
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+      <span style="background:rgba(212,160,23,0.15);border:1px solid rgba(212,160,23,0.3);border-radius:20px;padding:3px 10px;font-size:12px;">దేవత: ${d.god}</span>
+      <span style="background:rgba(74,144,184,0.15);border:1px solid rgba(74,144,184,0.3);border-radius:20px;padding:3px 10px;font-size:12px;">${d.elem}</span>
+    </div>
+    <div style="font-size:18px;color:#F5C842;margin-bottom:6px;">${d.name}</div>
+    <div class="result-te">${d.te}</div>
+    <div class="result-en">${d.en}</div>
+    <div class="remedies"><h4>✦ వాస్తు పరిహారాలు</h4><ul>${d.rem.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+    <button onclick="askGuru('${key} దిశ గురించి వివరంగా చెప్పండి — ${d.name}')" style="width:100%;margin-top:12px;padding:12px;background:linear-gradient(135deg,rgba(212,160,23,0.2),rgba(232,101,26,0.2));border:1px solid rgba(212,160,23,0.4);border-radius:10px;color:#F5C842;font-family:Tiro Telugu,serif;font-size:14px;cursor:pointer;">
+      🔮 గురువును అడగండి — Ask Guru More
+    </button>`;
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function showRoom(i, btn) {
+  document.querySelectorAll('.room-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const r = ROOMS[i];
+  const box = document.getElementById('room-result');
+  box.className = 'result-box show good';
+  box.innerHTML = `
+    <div style="font-size:20px;margin-bottom:4px;">${r.ico} ${r.te}</div>
+    <div class="result-te">${r.te_info}</div>
+    <div class="result-en">${r.en_info}</div>
+    <div class="remedies"><h4>✦ వాస్తు చిట్కాలు</h4><ul>${r.rem.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <button onclick="askGuru('నా ${r.te} (${r.en}) వాస్తు గురించి వివరంగా చెప్పండి, సమస్యలు మరియు పరిహారాలు కూడా')" style="width:100%;margin-top:12px;padding:12px;background:linear-gradient(135deg,rgba(212,160,23,0.2),rgba(232,101,26,0.2));border:1px solid rgba(212,160,23,0.4);border-radius:10px;color:#F5C842;font-family:Tiro Telugu,serif;font-size:14px;cursor:pointer;">
+      🔮 గురువును అడగండి — Ask Guru More
+    </button>`;
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function showZone(key) {
+  const d = DIR_DATA[key];
+  if(!d) return;
+  const box = document.getElementById('zone-result');
+  box.className = 'result-box show ' + (d.good?'good':'warn');
+  box.innerHTML = `
+    <div style="font-size:18px;color:#F5C842;margin-bottom:6px;">${d.name}</div>
+    <div class="result-te">${d.te}</div>
+    <div class="result-en">${d.en}</div>
+    <div class="remedies"><h4>✦ పరిహారాలు</h4><ul>${d.rem.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+    <button onclick="askGuru('నా ఇంట్లో ${d.name} సరిగ్గా వాడుకోవడం ఎలా? వివరంగా చెప్పండి')" style="width:100%;margin-top:12px;padding:12px;background:linear-gradient(135deg,rgba(212,160,23,0.2),rgba(232,101,26,0.2));border:1px solid rgba(212,160,23,0.4);border-radius:10px;color:#F5C842;font-family:Tiro Telugu,serif;font-size:14px;cursor:pointer;">
+      🔮 గురువును అడగండి — Ask Guru More
+    </button>`;
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function askGuru(question) {
+  // Switch to guru tab
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-guru').classList.add('active');
+  // Find and activate guru tab button
+  document.querySelectorAll('.tab').forEach(t=>{
+    if(t.textContent.includes('గురువు')) t.classList.add('active');
+  });
+  // Pre-fill and auto-send question
+  document.getElementById('chat-in').value = question;
+  // Scroll to top of guru panel
+  document.getElementById('panel-guru').scrollIntoView({behavior:'smooth',block:'start'});
+  // Auto send after short delay
+  setTimeout(()=>sendMsg(), 400);
+}
+
+
+// ============ LIFE EXPERT SYSTEM — Vastu + Muhurtha + Life Events ============
+
+// ---- Current panchanga helper for today ----
+function getTodayPanchanga() {
+  const now = new Date();
+  const dn = now.getDate() + now.getMonth()*3;
+  return {
+    nak: NAKSH[dn%27].t, nak_en: NAKSH[dn%27].e,
+    tithi: TITHI[dn%15],
+    yoga: YOGA[dn%26],
+    vara: DAYS[now.getDay()],
+    date: `${now.getDate()} ${['జనవరి','ఫిబ్రవరి','మార్చి','ఏప్రిల్','మే','జూన్','జులై','ఆగస్ట్','సెప్టెంబర్','అక్టోబర్','నవంబర్','డిసెంబర్'][now.getMonth()]} ${now.getFullYear()}`
+  };
+}
+
+// ---- Best months for events ----
+const EVENT_MONTHS = {
+  marriage: ['మాఘం','ఫాల్గుణం','వైశాఖం','జ్యేష్ఠం','కార్తీకం'],
+  griha: ['మాఘం','ఫాల్గుణం','వైశాఖం','కార్తీకం','మార్గశీర్షం'],
+  business: ['వైశాఖం','కార్తీకం','మాఘం','ఫాల్గుణం'],
+};
+
+// ---- Good nakshatras per event ----
+const EVENT_NAKS = {
+  marriage: ['రోహిణి','మృగశిర','మఘ','ఉత్తరఫల్గుని','హస్త','స్వాతి','అనూరాధ','మూల','ఉత్తరాషాఢ','ఉత్తరభాద్ర','రేవతి'],
+  griha:    ['అశ్వని','రోహిణి','మృగశిర','పుష్యమి','ఉత్తరఫల్గుని','హస్త','చిత్త','అనూరాధ','శ్రావణ','ధనిష్ఠ','రేవతి'],
+  business: ['అశ్వని','రోహిణి','పుష్యమి','హస్త','చిత్త','స్వాతి','అనూరాధ','శ్రావణ','రేవతి'],
+  travel:   ['అశ్వని','మృగశిర','పుష్యమి','హస్త','స్వాతి','శ్రావణ','రేవతి'],
+  vehicle:  ['అశ్వని','రోహిణి','మృగశిర','పుష్యమి','హస్త','చిత్త','శ్రావణ','రేవతి'],
+  education:['అశ్వని','రోహిణి','మృగశిర','పుష్యమి','హస్త','స్వాతి','శ్రావణ','రేవతి'],
+  medical:  ['అశ్వని','పుష్యమి','హస్త','అనూరాధ','శ్రావణ','రేవతి'],
+};
+
+const GOOD_VARA = {
+  marriage:  ['సోమ','బుధ','గురు','శుక్ర'],
+  griha:     ['సోమ','బుధ','గురు','శుక్ర'],
+  business:  ['సోమ','బుధ','గురు','శుక్ర'],
+  travel:    ['సోమ','బుధ','గురు','శుక్ర'],
+  vehicle:   ['బుధ','గురు','శుక్ర'],
+  education: ['బుధ','గురు'],
+  medical:   ['బుధ','గురు','శుక్ర'],
+};
+
+function getEventAdvice(eventType, eventName_te, eventName_en) {
+  const p = getTodayPanchanga();
+  const goodNaks = EVENT_NAKS[eventType] || EVENT_NAKS.griha;
+  const goodVara = GOOD_VARA[eventType] || ['సోమ','బుధ','గురు','శుక్ర'];
+  const isGoodNak = goodNaks.some(n => p.nak.includes(n.substring(0,4)));
+  const isGoodVara = goodVara.some(v => p.vara.includes(v));
+  const todayRating = isGoodNak && isGoodVara ? '🟢 శుభం' : isGoodNak || isGoodVara ? '🟡 సాధారణం' : '🔴 జాగ్రత్త';
+
+  return `🕉️ ${eventName_te} — విశ్లేషణ:
+
+📅 నేటి (${p.date}) పంచాంగం (తెలుగు calendar 📅):
+• వారం: ${p.vara} | నక్షత్రం (మీరు పుట్టిన star ⭐): ${p.nak} | తిథి (చంద్రుని ప్రకారం రోజు 🌙): ${p.tithi}
+• యోగం (రోజు స్వభావం 🔯): ${p.yoga}
+
+${todayRating} నేడు ${eventName_te} కు: ${isGoodNak && isGoodVara ? 'అత్యుత్తమ దినం!' : isGoodNak ? 'నక్షత్రం (మీరు పుట్టిన star ⭐) శుభం, వారం జాగ్రత్త' : isGoodVara ? 'వారం శుభం, నక్షత్రం (మీరు పుట్టిన star ⭐) జాగ్రత్త' : 'వేరే శుభ దినం చూడండి'}
+
+✅ ${eventName_te} కు అత్యుత్తమ నక్షత్రాలు:
+${goodNaks.slice(0,6).map(n=>`• ${n}`).join('\n')}
+
+✅ శుభ వారాలు: ${(GOOD_VARA[eventType]||[]).join(', ')}
+
+🔧 ${eventName_te} కు ముఖ్య సూచనలు:
+${getEventTips(eventType)}
+
+💡 మాస ముహూర్తాలు (శుభ సమయాలు) tab తెరిస్తే ఈ నెల అన్ని శుభ దినాలు calendar లో చూడవచ్చు — ఆ రోజు tap చేయండి!
+
+🌟 English: ${eventName_en} is best on ${(GOOD_VARA[eventType]||['Wed','Thu','Fri']).join('/')} with nakshatras like ${goodNaks.slice(0,3).join(', ')}. Check the Monthly tab for this month's best dates.`;
+}
+
+function getEventTips(type) {
+  const tips = {
+    marriage: `• బ్రాహ్మీ ముహూర్తం 🌅 (తెల్లవారుజామున 5–6 AM) (5-6 AM) లో వివాహం — చాలా మంచిది ⭐
+• వివాహానికి ముందు రోజు: ఉత్తర-తూర్పు మూలలో (ఈశాన్యం (ఉత్తర-తూర్పు మూల)) పూజ
+• మంటపం తూర్పు లేదా ఉత్తరం వైపు ఉండాలి
+• నాల్గవ రోజు (అష్టమి) వివాహం చేయవద్దు ❌
+• వధూవరుల రాశులు confirm చేయించుకోండి`,
+    griha: `• ఉదయం 6-9 AM మధ్య గృహప్రవేశం — శుభం
+• ముందు పూజ తప్పనిసరి — గణేశ పూజ చేయండి
+• తూర్పు ముఖంగా ఇంట్లోకి ప్రవేశించండి
+• ఇంట్లో వెలుతురు, అగరుబత్తి వెలిగించండి
+• అన్నం వండి కుటుంబంతో తినడం — సంప్రదాయం
+• చెప్పులు వెలుపలే వదలండి`,
+    business: `• ఉదయం 9-10:30 AM లో ప్రారంభం — శుభం
+• తూర్పు లేదా ఉత్తరం ముఖంగా shop/office
+• Ganesh photo ముఖద్వారంలో పెట్టండి
+• పసుపు కుంకుమ అలంకారం చేయండి
+• Cash register ఉత్తరం వైపు ఉంచండి
+• మొదటి customer కి discount ఇవ్వండి — శుభం`,
+    travel: `• ఉదయం తూర్పు లేదా ఉత్తరం వైపు ప్రయాణం — శుభం
+• ప్రయాణం ముందు దేవుని దర్శనం చేయండి
+• మంగళవారం, శనివారం దక్షిణ దిశకు చేయవద్దు ❌
+• రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు)లో ప్రయాణం మొదలెట్టవద్దు
+• అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) ముహూర్తం (శుభ సమయం) (రోజులో అత్యంత శుభ సమయం ⭐)లో (మధ్యాహ్నం 12 గంటలకు) బయలుదేరండి`,
+    vehicle: `• వాహనం తూర్పు ముఖంగా park చేయండి
+• కొనే రోజు పూజ చేయించండి — లక్ష్మీ పూజ
+• Odometer లో 1, 8, 9 తో end అయ్యే reading శుభం
+• తొలిసారి ఉత్తరం లేదా తూర్పుకు drive చేయండి
+• నిమ్మకాయ vehicle కింద పెట్టండి — దోష నివారణ`,
+    education: `• విద్యారంభం విజయదశమి రోజు — చాలా మంచిది ⭐
+• ఉదయం 6-8 AM మధ్య చదువు ప్రారంభించండి
+• సరస్వతి పూజ చేసి తర్వాత చదవండి
+• తూర్పు ముఖంగా కూర్చుని చదవండి
+• పసుపు రంగు notebooks, pens వాడండి`,
+    medical: `• శస్త్రచికిత్స (operation) బుధ, గురు వారాలలో
+• అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) ముహూర్తం (శుభ సమయం) (రోజులో అత్యంత శుభ సమయం ⭐)లో hospital కి వెళ్ళండి
+• ఉత్తర-తూర్పు మూలలో (ఈశాన్యం (ఉత్తర-తూర్పు మూల)) ప్రార్థన చేసిన తర్వాత వెళ్ళండి
+• Dhanvantari పూజ చేయండి
+• రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు)లో ఆపరేషన్ చేయవద్దు ❌`
+  };
+  return tips[type] || tips.griha;
+}
+
+const EXPERT_KB = [
+  // MARRIAGE
+  { keys:['marriage','వివాహం','పెళ్లి','wedding','kalyanam','కళ్యాణం','muhurtham','ముహూర్తం (శుభ సమయం)'],
+    fn: () => getEventAdvice('marriage','వివాహ ముహూర్తాలు (శుభ సమయాలు)','Marriage Muhurtham') },
+
+  // GRIHAPRAVESH
+  { keys:['griha pravesh','grahapravesh','house warming','గృహప్రవేశం','house warming','new home','new house','హౌస్ వార్మింగ్'],
+    fn: () => getEventAdvice('griha','గృహప్రవేశ ముహూర్తాలు (శుభ సమయాలు)','Grihapravesh/House Warming') },
+
+  // BUSINESS
+  { keys:['business','వ్యాపారం','shop','దుకాణం','office','ఆఫీసు','start business','opening','ప్రారంభం'],
+    fn: () => getEventAdvice('business','వ్యాపార ప్రారంభ ముహూర్తాలు (శుభ సమయాలు)','Business Opening') },
+
+  // TRAVEL
+  { keys:['travel','ప్రయాణం','journey','trip','yatra','యాత్ర','flight','train'],
+    fn: () => getEventAdvice('travel','ప్రయాణ ముహూర్తాలు (శుభ సమయాలు)','Travel/Journey') },
+
+  // VEHICLE
+  { keys:['vehicle','car','bike','వాహనం','కారు','motorcycle','new vehicle','నూతన వాహనం'],
+    fn: () => getEventAdvice('vehicle','వాహన ముహూర్తాలు (శుభ సమయాలు)','Vehicle Purchase') },
+
+  // EDUCATION
+  { keys:['education','vidyarambham','విద్యారంభం','school','చదువు','exam','పరీక్ష','study start','admission'],
+    fn: () => getEventAdvice('education','విద్యారంభ ముహూర్తాలు (శుభ సమయాలు)','Education/Vidyarambham') },
+
+  // MEDICAL / SURGERY
+  { keys:['surgery','operation','hospital','medical','శస్త్రచికిత్స','ఆపరేషన్','health treatment','medicine start'],
+    fn: () => getEventAdvice('medical','వైద్య ముహూర్తాలు (శుభ సమయాలు)','Medical/Surgery') },
+
+  // TODAY MUHURTHA
+  { keys:['today','నేడు','nedu','today muhurtham','నేటి ముహూర్తం (శుభ సమయం)','auspicious today','good time today','ఈ రోజు'],
+    fn: () => {
+      const p = getTodayPanchanga();
+      const r = getDayRating(new Date());
+      return `🕉️ నేటి (${p.date}) పంచాంగం (తెలుగు calendar 📅) & ముహూర్తాలు (శుభ సమయాలు):
+
+📋 పంచాంగం (తెలుగు calendar 📅):
+• వారం: ${p.vara}
+• నక్షత్రం (మీరు పుట్టిన star ⭐): ${p.nak} (${p.nak_en})
+• తిథి (చంద్రుని ప్రకారం రోజు 🌙): ${p.tithi}
+• యోగం (రోజు స్వభావం 🔯): ${p.yoga}
+
+${r.icon} నేడు మొత్తం: ${r.rating} (${r.score}/99)
+
+⏰ శుభ ముహూర్తాలు (శుభ సమయాలు):
+🟢 05:00-06:00 — బ్రాహ్మీ ముహూర్తం 🌅 (తెల్లవారుజామున 5–6 AM) (ప్రార్థన, ధ్యానం)
+🟢 06:00-07:30 — ఉదయ లగ్నం (ఉదయం శుభ సమయం) (కొత్త పనులు)
+✨ అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐): మధ్యాహ్నం 11:48-12:36 (అన్ని శుభ కార్యాలు)
+🟢 17:30-18:30 — సాయం సంధ్య (పూజ)
+
+⚠️ వర్జించవలసిన సమయాలు:
+🔴 రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు): ${fmtHour(getDayRating(new Date()).rahuStart)}-${fmtHour(getDayRating(new Date()).rahuEnd)}
+
+${r.reasons.good.length > 0 ? '✅ శుభ కారణాలు:\n'+r.reasons.good.map(x=>'• '+x).join('\n') : ''}
+${r.reasons.bad.length > 0 ? '\n⚠️ జాగ్రత్తలు:\n'+r.reasons.bad.map(x=>'• '+x).join('\n') : ''}
+
+💡 Tip: మాస ముహూర్తాలు (శుభ సమయాలు) tab లో ఈ నెల అన్ని శుభ దినాలు చూడండి!`; }},
+
+  // GOOD DAY CHECK
+  { keys:['is today good','good day','శుభ దినం','ఈ రోజు మంచిదా','auspicious day','rahu kalam'],
+    fn: () => {
+      const r = getDayRating(new Date());
+      const p = getTodayPanchanga();
+      return `🕉️ నేటి వాస్తు విశ్లేషణ — ${p.date}
+
+${r.icon} మొత్తం రేటింగ్: ${r.rating} (${r.score}/99)
+
+📊 కారణాలు:
+${r.reasons.good.map(x=>'✅ '+x).join('\n')||''}
+${r.reasons.bad.map(x=>'⚠️ '+x).join('\n')||''}
+
+⏰ రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు): ${fmtHour(r.rahuStart)}-${fmtHour(r.rahuEnd)} — చేయవద్దు ❌
+✨ అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) ముహూర్తం (శుభ సమయం) (రోజులో అత్యంత శుభ సమయం ⭐): 11:48-12:36 — అన్నిటికీ శుభం
+
+${r.score>=75 ? '🟢 ఈ రోజు ముఖ్యమైన పనులు ప్రారంభించవచ్చు!' :
+  r.score>=50 ? '🟡 సాధారణ పనులు చేయవచ్చు. ముఖ్యమైనవి అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) లో చేయండి.' :
+  '🔴 ఈ రోజు ముఖ్యమైన పనులు వాయిదా వేయండి. అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) ముహూర్తం (శుభ సమయం) (రోజులో అత్యంత శుభ సమయం ⭐) తప్ప మిగతా సమయాలు జాగ్రత్త.'}`; }},
+
+  // RAHU KALAM
+  { keys:['rahu kalam','రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు)','rahu','yamagandam','yama gandam','యమ గండం ⚠️ (జాగ్రత్త సమయం)','gulika','గులిక'],
+    fn: () => {
+      const now = new Date();
+      const r = getDayRating(now);
+      const YAMA = {0:[12,13.5],1:[10.5,12],2:[9,10.5],3:[7.5,9],4:[6,7.5],5:[15,16.5],6:[13.5,15]};
+      const GULI = {0:[13.5,15],1:[12,13.5],2:[10.5,12],3:[9,10.5],4:[7.5,9],5:[6,7.5],6:[15,16.5]};
+      const dw = now.getDay();
+      return `🕉️ నేటి అశుభ కాలాలు — ${DAYS[dw]}
+
+⚠️ రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు): ${fmtHour(r.rahuStart)} – ${fmtHour(r.rahuEnd)}
+ఈ సమయంలో: కొత్త పని ప్రారంభం, ప్రయాణం, వ్యాపార deals చేయవద్దు ❌
+
+⚠️ యమ గండం ⚠️ (జాగ్రత్త సమయం): ${fmtHour(YAMA[dw][0])} – ${fmtHour(YAMA[dw][1])}
+ఈ సమయంలో: ముఖ్యమైన నిర్ణయాలు చేయవద్దు ❌
+
+⚠️ గులిక కాలం ⚠️ (నిర్ణయాలు వాయిదా వేయండి): ${fmtHour(GULI[dw][0])} – ${fmtHour(GULI[dw][1])}
+ఈ సమయంలో: వైద్యం, కొత్త అడ్మిషన్లు చేయవద్దు ❌
+
+✅ అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) ముహూర్తం (శుభ సమయం) (రోజులో అత్యంత శుభ సమయం ⭐): 11:48 – 12:36
+ఈ సమయంలో: అన్ని శుభ కార్యాలు చేయవచ్చు — చాలా మంచిది ⭐!
+
+✅ బ్రాహ్మీ ముహూర్తం 🌅 (తెల్లవారుజామున 5–6 AM): 05:00 – 06:00
+ధ్యానం, ప్రార్థన, చదువు కోసం చాలా మంచిది ⭐
+
+🌟 English: Avoid Rahu Kalam for all important activities. Abhijit Muhurtham (11:48-12:36) is universally auspicious.`; }},
+
+  // PANCHANGA TODAY
+  { keys:['panchanga','పంచాంగం (తెలుగు calendar 📅)','panchangam','nakshatra','నక్షత్రం (మీరు పుట్టిన star ⭐)','tithi','తిథి (చంద్రుని ప్రకారం రోజు 🌙)','what star','which nakshatra'],
+    fn: () => {
+      const p = getTodayPanchanga();
+      const r = getDayRating(new Date());
+      const NAKSYM = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓','☀','🌙','⭐','🔯','🌟','✨','💫','🌠','🌌','🌃','⚡','🌊','🔥','🌿','🕉'];
+      const now = new Date();
+      const dn = now.getDate()+now.getMonth()*3;
+      return `🕉️ నేటి పంచాంగం (తెలుగు calendar 📅) — ${p.date}
+
+🌟 నక్షత్రం (మీరు పుట్టిన star ⭐): ${p.nak}
+🌙 తిథి (చంద్రుని ప్రకారం రోజు 🌙): ${p.tithi}  
+🔯 యోగం (రోజు స్వభావం 🔯): ${p.yoga}
+📅 వారం: ${p.vara}
+${r.icon} శుభత్వం: ${r.rating}
+
+✅ ${p.nak} నక్షత్రం (మీరు పుట్టిన star ⭐) లక్షణాలు:
+${getNakshatraDesc(dn%27)}
+
+⏰ నేటి ముఖ్య ముహూర్తాలు (శుభ సమయాలు):
+• అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐): 11:48-12:36 ✨
+• రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు): ${fmtHour(r.rahuStart)}-${fmtHour(r.rahuEnd)} ⚠️
+• బ్రాహ్మీ ముహూర్తం 🌅 (తెల్లవారుజామున 5–6 AM): 05:00-06:00 🟢`; }},
+
+  // VASTU MAIN ENTRANCE
+  { keys:['main door','entrance','front door','ముఖద్వారం','ప్రధాన ద్వారం','ద్వారం','door direction'],
+    ans:`🕉️ ప్రధాన ద్వారం వాస్తు:
+
+✅ అత్యుత్తమ దిశలు:
+• తూర్పు (East) 🌅 — ఆరోగ్యం, కీర్తి, సంపద
+• ఉత్తరం (North) 💰 — కుబేర (సంపద దేవుడు 💰) దిశ, ఆర్థిక అభివృద్ధి
+• ఈశాన్యం (ఉత్తర-తూర్పు మూల) (ఉత్తర-తూర్పు మూల 🙏) 🙏 — ఆధ్యాత్మిక శక్తి
+
+⚠️ వర్జించవలసినవి:
+• దక్షిణం — యమ దిశ, ఆర్థిక నష్టం
+• నైఋతి (దక్షిణ-పశ్చిమ మూల) (దక్షిణ-పశ్చిమ మూల 💪) — కుటుంబ కలహాలు
+
+🔧 నేడే చేయగలిగేవి:
+• ద్వారం ముందు రోజూ రంగవల్లి వేయండి
+• ఇంటి బయట రెండు వైపులా సాయంత్రం దీపాలు
+• తోరణం వేయండి — వేప/మామిడి ఆకులు
+• దక్షిణ ద్వారమైతే: Hanuman photo అతికించండి
+
+💡 Science: తూర్పు ద్వారానికి morning UV rays వస్తాయి — bacteria నాశనం, Vitamin D, positive mood.
+
+🌟 English: East/North main door is ideal. Daily rangoli and lamps attract positive energy.`},
+
+  // BEDROOM
+  { keys:['bedroom','bed room','పడక గది','బెడ్రూమ్','నిద్ర','sleep','sleeping direction','master bedroom'],
+    ans:`🕉️ పడక గది వాస్తు:
+
+✅ Master Bedroom స్థానం: నైఋతి (దక్షిణ-పశ్చిమ మూల) (దక్షిణ-పశ్చిమ మూల 💪) — శక్తి, అధికారం
+✅ తల దిశ: దక్షిణం 🌟 లేదా తూర్పు
+❌ తల ఉత్తరంగా: Earth's magnetic field disturb అవుతుంది, నిద్ర పాడవుతుంది
+
+🔧 నేడే చేయగలిగేవి:
+• మంచం దక్షిణ/పశ్చిమ గోడకు ఆనించండి
+• మంచం కింద ఖాళీగా ఉంచండి
+• Bedroom లో mirror మంచంకు ఎదురుగా వేయవద్దు
+• లేత రంగులు (cream, peach, light blue) వాడండి
+
+💡 Science: South head = Earth's magnetic field align = better REM sleep + blood circulation.
+
+🌟 English: SW bedroom, head towards South. No mirrors facing bed. Light colors for peaceful sleep.`},
+
+  // KITCHEN
+  { keys:['kitchen','వంటగది','cooking','వంట','gas','గ్యాస్','stove'],
+    ans:`🕉️ వంటగది వాస్తు:
+
+✅ ఉత్తమ స్థానం: ఆగ్నేయం (దక్షిణ-తూర్పు మూల) (దక్షిణ-తూర్పు మూల 🔥) — అగ్ని దేవుని స్థానం
+✅ వండే వ్యక్తి దిశ: తూర్పు ముఖంగా
+
+⚠️ వర్జించవలసినవి:
+• ఉత్తరం/ఈశాన్యం (ఉత్తర-తూర్పు మూల) — ఆర్థిక నష్టం
+• SW — కుటుంబ కలహాలు
+
+🔧 నేడే చేయగలిగేవి:
+• Gas stove తూర్పు వైపు తిప్పండి
+• Sink మరియు Stove పక్కపక్కన వద్దు (నీరు+అగ్ని conflict)
+• నీటి కుండ/filter ఉత్తర వైపు ఉంచండి
+• పసుపు/నారింజ రంగు వాడండి
+
+💡 Science: SE placement ensures smoke exhausts with natural airflow. East-facing cook gets morning light.
+
+🌟 English: Kitchen in SE, cook facing East. Keep fire and water sources separate.`},
+
+  // BATHROOM
+  { keys:['bathroom','toilet','బాత్రూమ్','టాయిలెట్','washroom','restroom'],
+    ans:`🕉️ బాత్రూమ్/టాయిలెట్ వాస్తు:
+
+✅ ఉత్తమ స్థానాలు: NW, West, South
+❌ అత్యంత దోషం (సమస్య కలిగించే స్థానం): ఈశాన్యం (ఉత్తర-తూర్పు మూల) (ఉత్తర-తూర్పు మూల 🙏) లో toilet
+
+🔧 NE లో ఉంటే పరిహారం (సమస్య తగ్గించే మార్గం):
+• రోజూ Sea salt వేసి mop చేయండి
+• తలుపు ఎల్లప్పుడూ మూసి ఉంచండి
+• లోపల money plant పెట్టండి
+• Blue/white రంగులు వాడండి
+• NE కిటికీ తెరచి ఉంచండి
+
+💡 Science: NE maximum sunlight వస్తుంది — toilet కి వాడటం solar energy వృధా.
+
+🌟 English: Bathroom in NW/West is best. NE toilet is worst defect — use salt mopping daily as remedy.`},
+
+  // POOJA ROOM
+  { keys:['pooja','puja','prayer','పూజ','దేవుడు','temple','mandir','మందిరం','worship','god'],
+    ans:`🕉️ పూజ గది వాస్తు:
+
+✅ అత్యుత్తమ స్థానం: ఈశాన్యం (ఉత్తర-తూర్పు మూల) (ఉత్తర-తూర్పు మూల 🙏) 🙏
+✅ రెండవ ఉత్తమం: తూర్పు లేదా ఉత్తరం
+❌ వర్జించవలసినవి: దక్షిణం, bedroom లో
+
+✅ Idol/ఫోటో దిశ: తూర్పు లేదా ఉత్తరం ముఖంగా పెట్టండి
+✅ పూజ చేసేటప్పుడు: తూర్పు ముఖంగా కూర్చోండి
+
+🔧 నేడే చేయగలిగేవి:
+• సూర్యోదయానికి ముందు దీపం వెలిగించండి
+• తాజా పూలు రోజూ ఉంచండి
+• కర్పూరం వేయండి — air purify అవుతుంది
+• పూజ గది ఎల్లప్పుడూ పరిశుభ్రంగా ఉంచండి
+
+💡 Science: NE gets maximum morning sunlight — ideal for meditation. Camphor smoke is anti-bacterial (scientifically proven).
+
+🌟 English: Prayer room in NE is ideal. Face East while praying. Light lamp daily at sunrise.`},
+
+  // NORTH DIRECTION
+  { keys:['north','ఉత్తరం','kubera','కుబేర (సంపద దేవుడు 💰)','wealth direction','money direction'],
+    ans:`🕉️ ఉత్తర దిశ — కుబేర (సంపద దేవుడు 💰) క్షేత్రం:
+
+✅ ఉత్తరంలో ఉంచవలసినవి:
+• స్టడీ రూమ్, ఆఫీసు, లాకర్
+• నీటి ఫౌంటెన్, aquarium
+• ఆర్థిక పత్రాలు, green plants
+
+❌ వర్జించవలసినవి: Toilet, Kitchen, Heavy storage
+
+🔧 నేడే:
+• ఉత్తర గోడకు అద్దం వేయండి — సంపద రెట్టింపు
+• Aquarium ఉంచండి — flowing water = flowing money
+• ఉత్తరంలో కిటికీ తెరచి ఉంచండి
+
+💡 Science: North direction in India has cooler breeze — study/office rooms here stay cooler, improving productivity.`},
+
+  // COLORS
+  { keys:['color','colour','రంగు','paint','walls','గోడ','which color','ఏ రంగు'],
+    ans:`🕉️ వాస్తు రంగులు — దిశ అనుసరించి:
+
+🎨 దిశకు తగిన రంగులు:
+• ఉత్తరం (N) 💚 — ఆకుపచ్చ, నీలం — సంపద
+• తూర్పు (E) 🤍 — తెలుపు, లేత ఆకుపచ్చ — ఆరోగ్యం
+• దక్షిణం (S) 🩷 — గులాబీ, కోరల్ — శక్తి
+• పశ్చిమం (W) 💙 — నీలం, grey — stability
+• ఈశాన్యం (ఉత్తర-తూర్పు మూల) (ఉత్తర-తూర్పు మూల 🙏) 💛 — పసుపు, తెలుపు — divine energy
+• ఆగ్నేయం (దక్షిణ-తూర్పు మూల) (SE) 🧡 — నారింజ, ఎరుపు — fire energy
+
+🔧 గది అనుసరించి:
+• Living room: Cream/off-white — universal positive
+• Bedroom: Light blue, peach — peaceful sleep
+• Kitchen: Yellow, orange — appetite, energy
+• Study: Green/blue — concentration
+• Avoid: Black in main rooms
+
+💡 Science: Colors affect psychology directly. Blue reduces heart rate. Yellow improves concentration. Green reduces eye strain.`},
+
+  // PLANTS
+  { keys:['plant','plants','మొక్క','మొక్కలు','tulsi','తులసి','money plant','garden','trees'],
+    ans:`🕉️ వాస్తు మొక్కలు:
+
+✅ శుభ మొక్కలు & స్థానాలు:
+• తులసి 🌿 — తూర్పు/ఈశాన్యం (ఉత్తర-తూర్పు మూల) — ఆరోగ్యం, పవిత్రత
+• Money Plant 💚 — ఉత్తరం/తూర్పు — సంపద
+• Bamboo 🎋 — తూర్పు/SE — luck
+• Aloe Vera — ఉత్తరం — positive energy
+• Jasmine/మల్లె — ఉత్తరం/తూర్పు — peace
+
+❌ వర్జించవలసినవి:
+• Cactus/thorny plants — ఇంట్లో వద్దు (కలహాలు)
+• Bonsai ఇంట్లో — growth blocked
+
+🔧 నేడే:
+• తులసి తూర్పులో పెట్టండి
+• Money plant ఉత్తర కిటికీలో
+• ఇంటి ముందు పూల మొక్క
+
+💡 Science: Tulsi produces O2 24 hours. Money plant removes indoor toxins (NASA study). Green reduces cortisol (stress) by 15%.`},
+
+  // HEALTH
+  { keys:['health','ఆరోగ్యం','sick','illness','disease','వ్యాధి','not feeling well','health vastu'],
+    ans:`🕉️ ఆరోగ్యానికి వాస్తు:
+
+✅ ఆరోగ్య వాస్తు నియమాలు:
+• ఈశాన్యం (ఉత్తర-తూర్పు మూల) పరిశుభ్రంగా ఉంచండి
+• తూర్పు కిటికీలు ఉదయం తెరవండి
+• తల దక్షిణం/తూర్పు పెట్టి నిద్రించండి
+• Bedroom SW లో ఉండాలి
+
+🔧 నేడే:
+• ఉదయం 6-8 AM కిటికీలు తెరవండి — UV rays
+• Sea salt mopping చేయండి
+• Camphor వేయండి — air purifier
+• Tulsi, Aloe vera పెట్టండి
+• Water leaks వెంటనే fix చేయండి
+
+⚠️ ఆరోగ్య దోషాలు:
+• ఉత్తర-తూర్పు మూలలో (ఈశాన్యం (ఉత్తర-తూర్పు మూల)) toilet — తీవ్రమైన ఆరోగ్య సమస్యలు
+• ఉత్తరంగా తల — నిద్ర సమస్యలు, headache
+• Broken walls/items — నిరంతర వ్యాధులు
+
+💡 Science: Natural ventilation removes CO2, prevents mold. Morning UV rays are natural disinfectant.`},
+
+  // MONEY/WEALTH
+  { keys:['money','wealth','సంపద','ధనం','financial','business loss','locker','తిజోరీ','income'],
+    ans:`🕉️ సంపద వాస్తు — కుబేర (సంపద దేవుడు 💰) ఉపాయాలు:
+
+✅ సంపద పెరగడానికి:
+• లాకర్/తిజోరీ SW లో — తెరిచేటప్పుడు ఉత్తరంగా
+• Aquarium లేదా ఫౌంటెన్ ఉత్తరంలో
+• ఉత్తర గోడకు అద్దం వేయండి
+
+🔧 నేడే:
+• ఇంటి ఉత్తరంలో నీటి కుండ ఉంచండి
+• Money plant ఉత్తరం/తూర్పులో
+• NE కోణంలో ముగ్గు వేయండి
+• పగిలిన సామానులు వెంటనే తొలగించండి
+
+⚠️ వర్జించవలసినవి:
+• ఉత్తరంలో toilet — సంపద drain
+• దక్షిణ-పశ్చిమ మూలలో (నైఋతి (దక్షిణ-పశ్చిమ మూల)) నీటి వనరు
+• Chipped/broken items ఇంట్లో
+
+💡 Science: Clear spaces reduce financial anxiety (proven). Organization improves decision-making quality.`},
+
+  // STUDY
+  { keys:['study','studies','చదువు','students','విద్యార్థి','exam results','concentration','focus'],
+    ans:`🕉️ చదువు & విద్యా వాస్తు:
+
+✅ ఉత్తమ స్థానం: ఉత్తరం/తూర్పు/ఈశాన్యం (ఉత్తర-తూర్పు మూల)
+✅ చదివే దిశ: తూర్పు ముఖంగా 🌟 — Concentration max
+✅ నిద్ర దిశ: తల తూర్పుగా — brain refresh అవుతుంది
+
+🔧 నేడే:
+• Study table తూర్పు వైపు తిప్పండి
+• Books తూర్పు/ఉత్తర గోడకు
+• సరస్వతి photo ఉత్తర గోడకు
+• పసుపు రంగు pen stand ఉంచండి
+• Study lamp తూర్పు నుండి
+
+💡 Science: East-facing study gets morning sunlight 6-10 AM — brain most alert + natural light reduces eye strain.`},
+
+  // VASTU WHAT IS IT
+  { keys:['what is vastu','వాస్తు అంటే','explain','అర్థం','meaning','basics','beginner'],
+    ans:`🕉️ వాస్తు శాస్త్రం అంటే ఏమిటి?
+
+వాస్తు = "నివాసం" అని అర్థం. 5000+ సంవత్సరాల పురాతన భారతీయ నిర్మాణ శాస్త్రం.
+
+🌍 5 Elements (పంచభూతాలు):
+• భూమి (Earth) — stability
+• జలం (Water) — wealth, flow
+• అగ్ని (Fire) — energy, health
+• వాయువు (Air) — growth
+• ఆకాశం (Space) — expansion
+
+✅ 5 Basic Rules:
+1️⃣ ముఖద్వారం — తూర్పు/ఉత్తరం
+2️⃣ వంటగది — SE/తూర్పు
+3️⃣ బాత్రూమ్ — NW/West (NE కాదు!)
+4️⃣ పడకగది — SW/దక్షిణం
+5️⃣ పూజ గది — ఈశాన్యం (ఉత్తర-తూర్పు మూల)
+
+💡 Science = sunlight + airflow + magnetic fields + psychology combine చేసిన wisdom.
+
+🌟 English: Vastu is 5000+ year old Indian architecture science aligning homes with natural energies for health, wealth and happiness.`},
+
+  // SKEPTIC
+  { keys:['doesn\'t work','fake','superstition','మూఢనమ్మకం','not true','prove','science','scientific'],
+    ans:`🕉️ మీ అభిప్రాయం సరైనదే — నేను argue చేయను!
+
+🔬 Science వేపు నుండి మాత్రమే చూద్దాం:
+
+✅ Research Proven Facts:
+• East rooms — morning UV rays bacteria చంపుతాయి (WHO)
+• Cross-ventilation — CO2 తగ్గుతుంది, productivity +15%
+• South head sleep — Earth magnetic field align, better REM sleep
+• Decluttering — cortisol (stress hormone) తగ్గుతుంది
+• Indoor plants — toxins 87% తగ్గుతాయి (NASA study)
+• Natural light — serotonin (happiness hormone) పెరుగుతుంది
+
+🤝 నా suggestion:
+ఒక్క small change try చేయండి — 30 రోజులు observe చేయండి. మీకే తేడా అర్థమవుతుంది.
+
+Vastu = Ancient Environmental Science + Energy Psychology + Architecture.
+నమ్మాల్సిన అవసరం లేదు — results judge చేయండి.`},
+
+  // DEFAULT
+  { keys:['help','సహాయం','advice','సలహా','vastu','వాస్తు','hi','hello','నమస్కారం'],
+    ans:`🕉️ నమస్కారం! నేను మీ జీవిత సలహాదారుడిని 🙏
+
+నేను ఇవన్నీ advise చేయగలను:
+
+💒 జీవిత ముఖ్య ఘట్టాలు:
+• వివాహ ముహూర్తాలు (శుభ సమయాలు)
+• గృహప్రవేశ ముహూర్తాలు (శుభ సమయాలు)  
+• వ్యాపార ప్రారంభ ముహూర్తాలు (శుభ సమయాలు)
+• వాహన ముహూర్తాలు (శుభ సమయాలు)
+• విద్యారంభ ముహూర్తాలు (శుభ సమయాలు)
+• ప్రయాణ ముహూర్తాలు (శుభ సమయాలు)
+
+📅 నిత్య పంచాంగం (తెలుగు calendar 📅):
+• నేటి నక్షత్రం (మీరు పుట్టిన star ⭐), తిథి (చంద్రుని ప్రకారం రోజు 🌙), రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు)
+• ఈ రోజు శుభమా అశుభమా
+• అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) ముహూర్తం (శుభ సమయం) (రోజులో అత్యంత శుభ సమయం ⭐) సమయం
+
+🏠 వాస్తు శాస్త్రం:
+• అన్ని గదుల వాస్తు
+• దిశలు, రంగులు, మొక్కలు
+• దోషాలు & పరిహారాలు
+
+మీ ప్రశ్న తెలుగులో లేదా English లో అడగండి! 🙂`},
+  { keys:['north facing','north face','ఉత్తర ముఖం','north house'],
+    ans:`🕉️ ఉత్తర ముఖం ఇల్లు — కుబేర (సంపద దేవుడు 💰) దిశ
+
+✅ చాలా శుభమైన ఇల్లు! ఉత్తర ముఖం:
+• సంపద, career growth కి అత్యుత్తమం
+• ఆర్థిక అభివృద్ధి, promotion కి అనుకూలం
+
+🔧 ఉత్తర ముఖం ఇంట్లో చేయాల్సినవి:
+• Main door ఉత్తరం మధ్యలో లేదా కొంచెం తూర్పు వైపు
+• ఉత్తర వైపు ఎక్కువ కిటికీలు — వెలుతురు, గాలి రానివ్వండి
+• ఉత్తర గోడకు అద్దం — సంపద రెట్టింపు
+• దక్షిణ గోడ దృఢంగా, తక్కువ కిటికీలు
+
+🌟 English: North-facing house is highly auspicious for wealth and career. Maximum openings in North, strong South wall.`},
+
+  { keys:['south facing','south face','దక్షిణ ముఖం','south house'],
+    ans:`🕉️ దక్షిణ ముఖం ఇల్లు — సరైన వాస్తుతో శుభమే!
+
+✅ సరైన remedies తో ok:
+• Main door 4వ పాదంలో (middle కి కొంచెం తూర్పు) పెట్టండి
+• Hanuman photo ముఖద్వారంలో అతికించండి
+• ద్వారం ముందు bright light వెలిగించండి
+• దక్షిణ వైపు చెట్లు, plants — shield లా
+• ఉత్తరం, తూర్పులో ఎక్కువ కిటికీలు
+
+❌ చేయవద్దు: దక్షిణ ద్వారం మధ్యలో, దక్షిణంలో నీటి వనరు
+
+🌟 English: South-facing house: place door in 4th pada, add Hanuman image, strong south wall, more north/east openings.`},
+
+  { keys:['east facing','east face','తూర్పు ముఖం'],
+    ans:`🕉️ తూర్పు ముఖం ఇల్లు — ఇంద్ర దిశ 🌅
+
+✅ అత్యంత శుభమైన ఇల్లు!
+• ఆరోగ్యం, కీర్తి, పేరు ప్రతిష్టకు చాలా మంచిది
+• Government jobs, health, education కి అనుకూలం
+
+🔧 చేయాల్సినవి:
+• Main door తూర్పు మధ్యలో లేదా కొంచెం ఉత్తరం వైపు
+• తూర్పు గోడకు ఎక్కువ కిటికీలు — ఉదయపు సూర్యకాంతి
+• తూర్పులో పెద్ద చెట్లు పెట్టవద్దు — సూర్యుడు అడ్డుపడతాడు
+
+🌟 English: East-facing house best for health and fame. Maximum east windows for morning sun. No tall trees blocking east.`},
+
+  { keys:['west facing','west face','పశ్చిమ ముఖం'],
+    ans:`🕉️ పశ్చిమ ముఖం ఇల్లు — వరుణ దిశ
+
+✅ మంచి ఇల్లు! Business, stability కి అనుకూలం.
+
+🔧 చేయాల్సినవి:
+• Main door middle లేదా కొంచెం ఉత్తరం వైపు
+• తూర్పు, ఉత్తరంలో ఎక్కువ కిటికీలు
+• పశ్చిమంలో తక్కువ కిటికీలు — afternoon heat తగ్గుతుంది
+• పశ్చిమ వైపు చెట్లు — heat shield
+
+🌟 English: West-facing house good for business. Keep north/east windows open. Minimize west openings to reduce heat.`},
+
+  { keys:['flat','apartment','అపార్ట్మెంట్','flat vastu','floor'],
+    ans:`🕉️ Flat / Apartment వాస్తు
+
+✅ Flat కొనేటప్పుడు చూడాల్సినవి:
+• Entry తూర్పు లేదా ఉత్తర వైపు ఉండాలి
+• ఉత్తర-తూర్పు మూలలో (ఈశాన్యం) toilet వద్దు ❌
+• Kitchen దక్షిణ-తూర్పు మూలలో (ఆగ్నేయం) ఉండాలి
+• Square లేదా Rectangle shape flat మంచిది
+
+🔧 Apartment లో remedies:
+• Sea salt mopping వారానికి ఒకసారి
+• ఉత్తర-తూర్పు మూలలో (ఈశాన్యం) దీపం/మొక్క
+• ఉత్తర గోడకు అద్దం
+• Main door దగ్గర రంగవల్లి, తోరణం
+
+🌟 English: Check entry direction, kitchen SE, no toilet in NE. Use salt mopping and NE lamp as key remedies.`},
+
+  { keys:['plot','land','నివేశనం','corner plot','square plot','irregular plot'],
+    ans:`🕉️ Plot / Land వాస్తు
+
+✅ శుభ Plot shapes:
+• Square (చతురస్రం) — అత్యుత్తమం ⭐
+• Rectangle — మంచిది
+• Triangular plot — చేయవద్దు ❌
+
+✅ Corner plots:
+• ఉత్తర-తూర్పు మూల (ఈశాన్య) corner — అత్యంత శుభం ⭐
+• ఇతర corners — మంచివి
+
+✅ Plot slope:
+• ఉత్తరం, తూర్పు వైపు slope — శుభం
+• దక్షిణం, పశ్చిమం వైపు slope — కూడా అనుకూలం
+
+🌟 English: Square/rectangle plots best. NE corner plot most auspicious. Avoid triangular. Slope towards North/East is ideal.`},
+
+  { keys:['balcony','terrace','బాల్కనీ','టెరేస్','veranda'],
+    ans:`🕉️ Balcony / Terrace వాస్తు
+
+✅ శుభ దిశలు:
+• తూర్పు balcony — ఆరోగ్యం, positive energy ⭐
+• ఉత్తరం balcony — సంపద, growth
+
+❌ చేయవద్దు:
+• దక్షిణ balcony లో heavy items
+• దక్షిణ-పశ్చిమ మూల (నైఋతి) extend చేయవద్దు
+
+🔧 చేయాల్సినవి:
+• తూర్పు/ఉత్తర balcony లో plants పెట్టండి
+• Clean, clutter-free ఉంచండి
+• Broken tiles వెంటనే fix చేయండి
+
+🌟 English: East/North balcony is best. Keep it clean with plants. Never extend SW corner.`},
+
+  { keys:['children room','kids room','child room','పిల్లల గది','baby room'],
+    ans:`🕉️ పిల్లల గది వాస్తు
+
+✅ ఉత్తమ స్థానం: పశ్చిమం లేదా ఉత్తర-పశ్చిమం
+✅ పిల్లల మంచం: తల తూర్పు లేదా దక్షిణంగా ✅, ఉత్తరంగా వద్దు ❌
+✅ Study: తూర్పు ముఖంగా చదవాలి ⭐
+
+🔧 చేయాల్సినవి:
+• సరస్వతి photo ఉత్తరం లేదా తూర్పు గోడకు
+• Yellow/green రంగు walls — concentration
+• Clutter తొలగించండి
+• Study lamp తూర్పు వైపు నుండి light
+
+🌟 English: Kids room in West/NW. Head towards East/South. Face East while studying. Saraswati on North wall.`},
+
+  { keys:['guest room','guests','అతిథి గది','visitors'],
+    ans:`🕉️ అతిథి గది వాస్తు
+
+✅ అత్యుత్తమ స్థానం: ఉత్తర-పశ్చిమ మూల (వాయవ్యం)
+• అతిథులు వస్తారు, కానీ ఎక్కువ కాలం ఉండరు — perfect!
+• ఉత్తరం కూడా అనుకూలం
+
+❌ వద్దు: ఉత్తర-తూర్పు మూల (ఈశాన్యం), దక్షిణ-పశ్చిమ మూల (నైఋతి)
+
+🔧 చేయాల్సినవి: Fresh flowers, bright light, clean & airy
+
+🌟 English: Guest room in NW ideal. Light, clean, airy. Guests come and go naturally from this direction.`},
+
+  { keys:['dining','dining room','dining table','భోజనం','eating place'],
+    ans:`🕉️ Dining Room వాస్తు
+
+✅ ఉత్తమ స్థానం: పశ్చిమం — అత్యుత్తమం
+✅ Table shape: Square లేదా Rectangle ✅, Round — avoid ❌
+✅ కూర్చున్నప్పుడు: తూర్పు ముఖంగా ⭐
+
+❌ వద్దు:
+• Dining లో అద్దం వేయవద్దు — negative
+• Toilet పక్కన dining వద్దు
+
+🔧 చేయాల్సినవి: Fresh flowers, bright light, pleasant atmosphere
+
+🌟 English: Dining in West, sit facing East. Square table. No mirrors. Bright lighting, fresh flowers.`},
+
+  { keys:['idol','god statue','విగ్రహం','ganesha','ganesh','lakshmi','shiva','diety placement'],
+    ans:`🕉️ దేవతల విగ్రహాలు — పూజ గది వాస్తు
+
+✅ ఏ దేవత ఎక్కడ:
+• గణేశుడు — Main door లేదా ఉత్తర-తూర్పు మూలలో (ఈశాన్యం)
+• లక్ష్మి — ఉత్తరం లేదా ఉత్తర-తూర్పు మూలలో
+• శివలింగం — ఉత్తర-తూర్పు మూలలో (ఈశాన్యం)
+• సరస్వతి — తూర్పులో లేదా ఉత్తరంలో
+• Hanuman — దక్షిణ గోడ లేదా main door
+
+❌ వద్దు:
+• విగ్రహాలు ఒకదానికొకటి ఎదురుగా వద్దు
+• Broken idols — వెంటనే నదిలో వేయండి
+
+🌟 English: Ganesha at entrance/NE. Lakshmi North/NE. Shiva in NE. Saraswati East. Hanuman South wall.`},
+
+  { keys:['wardrobe','almirah','cupboard','దుస్తుల బీరువా','clothes storage'],
+    ans:`🕉️ Wardrobe / అలమారి వాస్తు
+
+✅ ఉంచాల్సిన దిశ: దక్షిణ లేదా పశ్చిమ గోడకు ఆనించి
+✅ తెరిచేటప్పుడు: తూర్పు లేదా ఉత్తరం వైపు తెరవాలి
+✅ Safe/Locker: దక్షిణ-పశ్చిమ మూలలో (నైఋతి), ఉత్తరం వైపు తెరవాలి 💰
+
+❌ వద్దు: ఉత్తర/తూర్పు గోడకు heavy wardrobe — energy blocked
+❌ Mirror తో wardrobe మంచానికి ఎదురుగా వద్దు
+
+🌟 English: Wardrobe on South/West wall. Open towards North/East. Safe in SW opening North.`},
+
+  { keys:['septic tank','drainage','drain','sewer','waste water','pit','మురుగు'],
+    ans:`🕉️ Septic Tank / Drainage వాస్తు
+
+✅ శుభ స్థానాలు: ఉత్తర-పశ్చిమ మూల (వాయవ్యం) ⭐, పశ్చిమం, దక్షిణం
+❌ అత్యంత తప్పు: ఉత్తర-తూర్పు మూల (ఈశాన్యం) ❌, దక్షిణ-పశ్చిమ మూల (నైఋతి)
+
+✅ Drainage pipes: నీరు ఉత్తరం లేదా తూర్పు వైపు flow అవ్వాలి
+
+🌟 English: Septic tank in NW or West. Never in NE. Drainage should flow towards North or East.`},
+
+  { keys:['generator','solar','inverter','electric meter','electricity','UPS'],
+    ans:`🕉️ Generator / Solar / Electrical వాస్తు
+
+✅ Generator, Solar, Inverter, Electric meter అన్నీ:
+• దక్షిణ-తూర్పు మూల (ఆగ్నేయం) 🔥 — fire energy, electricity కి అత్యుత్తమం
+• దక్షిణం కూడా అనుకూలం
+
+❌ వద్దు: ఉత్తర-తూర్పు మూల (ఈశాన్యం) లో electrical — wrong zone
+
+🌟 English: All electrical equipment including generator, solar, inverter in SE (fire zone).`},
+
+  { keys:['swimming pool','pool','water body','pond','చెరువు'],
+    ans:`🕉️ Swimming Pool / Water Body వాస్తు
+
+✅ శుభ స్థానాలు: ఉత్తరం ⭐, తూర్పు, ఉత్తర-తూర్పు మూల (ఈశాన్యం)
+❌ చేయవద్దు: దక్షిణం, దక్షిణ-పశ్చిమ మూల (నైఋతి), దక్షిణ-తూర్పు మూల (ఆగ్నేయం)
+
+🔧 Pool maintenance: Clean, flowing water ఉంచండి. Stagnant water negative energy.
+
+🌟 English: Swimming pool in North or NE is ideal. Never in South or SW. Keep water clean and circulating.`},
+
+  { keys:['home office','work from home','WFH','work desk','desk placement','work space','work table'],
+    ans:`🕉️ Home Office / Work From Home వాస్తు
+
+✅ Work position: ఉత్తరం లేదా తూర్పు ముఖంగా కూర్చోండి ⭐
+✅ Desk: ఉత్తరం లేదా తూర్పు గోడ వైపు
+✅ Owner position: దక్షిణ-పశ్చిమ మూల (నైఋతి) కూర్చుని ఉత్తరం చూడాలి
+✅ Back to wall — stability, authority
+
+🔧 చేయాల్సినవి:
+• Desk clean, organized ఉంచండి
+• Green plant desk పైన — focus
+• Lucky bamboo ఉత్తర corner లో
+
+🌟 English: Face North/East while working. SW position with back to wall. Clean desk. Green plant improves focus.`},
+
+  { keys:['main gate','compound gate','gate vastu','entrance gate','compound wall','గేటు'],
+    ans:`🕉️ Main Gate వాస్తు
+
+✅ శుభ దిశలు: తూర్పు ⭐, ఉత్తరం, ఉత్తర-తూర్పు మూల (ఈశాన్యం)
+❌ వద్దు: దక్షిణ-పశ్చిమ మూల (నైఋతి) gate ❌
+
+✅ Gate design: Double gate (రెండు రెక్కలు) — balanced energy
+
+🔧 చేయాల్సినవి:
+• Gate దగ్గర bright light
+• Gate ముందు రంగవల్లి
+• Gate clean, oil వేసి maintain చేయండి
+
+🌟 English: Main gate East or North is ideal. Double-leaf gate. Keep it clean, bright and well-maintained.`},
+
+  { keys:['bedroom color','hall color','kitchen color','room color','paint color','ఏ రంగు వేయాలి','wall color'],
+    ans:`🕉️ గది అనుసరించి రంగులు
+
+🛏️ Bedroom: Light blue, lavender, cream, peach ✅ — peaceful sleep
+🍳 Kitchen: Yellow, orange, light green ✅ — appetite, energy
+🛋️ Hall/Living: Cream, off-white, light yellow ✅ — welcoming
+📚 Study: Green, light blue ✅ — concentration
+🙏 Pooja Room: White, yellow, saffron ✅ — divine
+🚿 Bathroom: White, light blue ✅ — clean feel
+
+❌ అన్ని గదుల్లో: Dark colors, black — వద్దు
+
+💡 Science: Colors affect psychology directly — proven by research.
+
+🌟 English: Pastels for bedroom, yellow for kitchen, cream for living room, green/blue for study. No dark colors in main rooms.`},
+
+  { keys:['house number','flat number','lucky number','door number','గృహ సంఖ్య','lucky house'],
+    ans:`🕉️ గృహ సంఖ్య వాస్తు
+
+✅ శుభ సంఖ్యలు: 1, 2, 3, 5, 6 ⭐, 9
+⚠️ సావధానంగా: 4 (hard work), 8 (karmic challenges)
+
+🔢 Calculate చేయడం:
+అన్ని digits add చేయండి → single digit వచ్చే వరకు
+Example: Flat 304 = 3+0+4 = 7
+
+✅ Remedy: సంఖ్య మార్చలేకపోతే — nameplate లో O లేదా A add చేసి adjust చేయవచ్చు.
+
+🌟 English: House numbers 1,2,3,5,6,9 are auspicious. Add all digits to get single digit. 6 is best for family harmony.`},
+
+  { keys:['always sick','frequent illness','health problems','medical bills','నిరంతరం జబ్బు','health issue'],
+    ans:`🕉️ ఆరోగ్య సమస్యలకు వాస్తు పరిహారాలు
+
+⚠️ ముఖ్య కారణాలు:
+• ఉత్తర-తూర్పు మూలలో (ఈశాన్యం) toilet — అత్యంత దోషం (సమస్య కలిగించే స్థానం)
+• ఉత్తరంగా తల పెట్టి నిద్ర
+• తూర్పు కిటికీలు తెరవకపోవడం
+• Water leaks
+
+🔧 వెంటనే చేయాల్సిన పరిహారాలు:
+• రోజూ ఉదయం 6-8 AM అన్ని కిటికీలు తెరవండి ⭐
+• Sea salt mopping వారానికి ఒకసారి
+• తల దక్షిణం లేదా తూర్పు మార్చండి
+• Camphor (కర్పూరం) వేయండి — air purify
+• Tulsi మొక్క తూర్పులో పెట్టండి
+• Water leaks వెంటనే fix చేయండి
+
+🌟 English: Open east windows daily, salt mopping weekly, head towards South, fix all leaks, Tulsi plant in East.`},
+
+  { keys:['financial problems','money problems','debt','no money','ఆర్థిక సమస్యలు','అప్పులు'],
+    ans:`🕉️ ఆర్థిక సమస్యలకు వాస్తు పరిహారాలు
+
+⚠️ ముఖ్య కారణాలు:
+• ఉత్తరంలో toilet, kitchen
+• Broken/cracked items ఇంట్లో
+• Dark, cluttered house
+• Water leaks (wealth drains like water)
+
+🔧 వెంటనే పరిహారాలు:
+• Locker/wallet ఉత్తరం వైపు తెరవండి 💰
+• ఉత్తర గోడకు అద్దం వేయండి
+• Money plant ఉత్తరం లేదా తూర్పు లో
+• Aquarium ఉత్తరంలో
+• అన్ని Broken items వెంటనే fix/remove చేయండి
+• Clutter తొలగించండి — blocked money తెరుచుకుంటుంది
+• ఉత్తర-తూర్పు మూల (ఈశాన్యం) clean, bright ఉంచండి
+
+🌟 English: Fix all leaks, remove clutter and broken items, money plant in North, mirror on North wall, aquarium in North.`},
+
+  { keys:['relationship','marriage problems','husband wife','couple','family harmony','కుటుంబ కలహాలు'],
+    ans:`🕉️ దాంపత్య సామరస్యానికి వాస్తు
+
+⚠️ కలహాలకు కారణాలు:
+• దక్షిణ-పశ్చిమ మూల (నైఋతి) లో water
+• Bedroom తప్పు దిశలో
+• Bedroom లో mirror మంచానికి ఎదురుగా
+• Bedroom లో cactus, thorny plants
+• Bedroom లో TV
+
+🔧 పరిహారాలు:
+• Master bedroom దక్షిణ-పశ్చిమ మూలలో (నైఋతి)
+• Light pink లేదా cream రంగు walls
+• Rose quartz crystal bedroom లో — love, harmony
+• Two birds (pair) photo — North wall లేదా bedroom
+• Bedroom TV తొలగించండి
+• Couple తల దక్షిణంగా నిద్ర
+
+🌟 English: SW bedroom, pink/cream walls, remove TV and mirrors facing bed, rose quartz crystal, head towards South.`},
+
+  { keys:['career','job','promotion','interview','career growth','ఉద్యోగం'],
+    ans:`🕉️ Career / Job వృద్ధికి వాస్తు
+
+✅ Career growth కి:
+• ఉత్తర direction activate చేయండి — career, opportunities
+• ఉత్తర గోడకు అద్దం వేయండి
+• Work corner ఉత్తరం లేదా తూర్పు
+• Resume/job documents ఉత్తరంలో ఉంచండి
+
+🔧 Office/Desk వాస్తు:
+• తూర్పు లేదా ఉత్తరం ముఖంగా కూర్చోండి ⭐
+• Back to wall, door కనిపించేలా కూర్చోండి
+• Desk clean, organized
+• Green plant ఉత్తరంలో — growth energy
+
+💡 Wednesday (బుధవారం) — career decisions కి శుభం
+
+🌟 English: Face North/East at work. Activate North direction with mirror, aquarium, green plants. Keep north clean and bright.`},
+
+  { keys:['remedy','remedies','solution','fix','without construction','construction లేకుండా','పరిహారం','vastu remedy'],
+    ans:`🕉️ నిర్మాణం లేకుండా వాస్తు పరిహారాలు — Top Remedies
+
+🧂 Salt Remedies:
+• Sea salt mopping — negative energy తొలగుతుంది ⭐
+• Salt bowls corners లో — negativity absorb చేస్తాయి
+
+🪴 Plant Remedies:
+• Tulsi తూర్పులో — purification ⭐
+• Money plant ఉత్తరంలో — wealth
+• Lucky bamboo ఉత్తర-తూర్పు మూలలో (ఈశాన్యం) — luck
+
+💡 Light Remedies:
+• ఉత్తర-తూర్పు మూలలో (ఈశాన్యం) bright light ⭐
+• Himalayan salt lamp — positive energy
+
+🔮 Crystal Remedies:
+• Clear quartz ఉత్తర-తూర్పు మూలలో (ఈశాన్యం) — clarity
+• Rose quartz bedroom — love
+• Citrine ఉత్తరంలో — wealth
+
+🎐 Wind Chime: Metal, ఉత్తరం లేదా ఉత్తర-పశ్చిమ మూలలో (వాయవ్యం) — 6 లేదా 8 rods
+
+🌟 English: Top remedies: salt mopping, NE bright lamp, North mirror, money plant North, clear quartz NE, wind chime NW.`},
+
+  { keys:['shop vastu','shop','store vastu','retail','showroom','దుకాణం వాస్తు'],
+    ans:`🕉️ దుకాణం / Shop వాస్తు
+
+✅ Shop entrance: తూర్పు లేదా ఉత్తరం ⭐
+✅ Shop owner: దక్షిణ-పశ్చిమ మూలలో (నైఋతి) కూర్చుని తూర్పు/ఉత్తరం ముఖంగా
+✅ Cash counter: ఉత్తరం వైపు — Kubera (సంపద దేవుడు 💰) energy, ఉత్తరంగా తెరవాలి
+
+🔧 Shop tips:
+• Ganesh/Lakshmi photo entrance దగ్గర
+• Aquarium ఉత్తరంలో
+• Heavy items దక్షిణ-పశ్చిమ మూలలో (నైఋతి) లో
+• Shop clean, organized — energy flow
+
+🌟 English: Shop entrance East/North. Owner SW facing North. Cash counter North. Ganesh at entrance. Keep bright and organized.`},
+
+  { keys:['sleep direction','sleeping direction','head direction','తల ఏ దిశగా','నిద్ర దిశ','pillow direction'],
+    ans:`🕉️ నిద్ర దిశ — తల ఏ వైపు పెట్టాలి?
+
+1️⃣ దక్షిణం (South) ⭐ — అత్యుత్తమం
+• Deep sleep, long life, good health
+• Earth's magnetic field తో align
+
+2️⃣ తూర్పు (East) ✅ — మంచిది
+• Students కి, spiritual growth కి
+
+3️⃣ పశ్చిమం (West) ⚠️ — సాధారణం
+
+❌ ఉత్తరం (North) — చేయవద్దు!
+• Blood pressure, disturbed sleep, bad dreams possible
+
+💡 Science: Earth magnetic field + hemoglobin (iron in blood) → South head = smooth circulation = better sleep.
+
+🌟 English: Head towards South (best) or East. Never North — disturbs blood circulation and causes restless sleep.`},
+
+  { keys:['vastu science','scientific','prove','evidence','why vastu','logic','reason'],
+    ans:`🕉️ వాస్తు శాస్త్రం — Scientific Evidence
+
+✅ Scientifically proven facts:
+• East rooms — morning UV rays bacteria చంపుతాయి (WHO)
+• Cross ventilation — CO2 తగ్గుతుంది, productivity +15%
+• South head sleeping — Earth magnetic field align, better REM sleep
+• Decluttering — cortisol (stress hormone) తగ్గుతుంది
+• Indoor plants — toxins 87% తగ్గుతాయి (NASA study)
+• Natural light — serotonin (happiness hormone) పెరుగుతుంది
+
+🤝 నా suggestion:
+ఒక్క small change try చేయండి — 30 రోజులు observe చేయండి.
+
+Vastu = 5000 years observation + architecture + environmental science.
+నమ్మకం అవసరం లేదు — results judge చేయండి!
+
+🌟 English: Vastu backed by science — UV kills bacteria, ventilation boosts productivity, south head improves sleep. Try 30 days and judge by results.`},
+
+  { keys:['gas stove','stove direction','refrigerator','fridge','wash basin','sink','kitchen items'],
+    ans:`🕉️ వంటగది వస్తువుల వాస్తు
+
+✅ Gas Stove: దక్షిణ-తూర్పు మూలలో (ఆగ్నేయం), వండే వ్యక్తి తూర్పు ముఖంగా ⭐
+✅ Refrigerator: దక్షిణ-తూర్పు మూల (ఆగ్నేయం) లేదా దక్షిణం
+✅ Wash Basin / Sink: ఉత్తరం లేదా తూర్పు — నీటి వనరు
+✅ Microwave / Oven: దక్షిణ-తూర్పు మూలలో (ఆగ్నేయం)
+
+❌ వద్దు: Stove మరియు sink పక్కపక్కన వద్దు (fire + water conflict ❌)
+
+🌟 English: Stove SE, cook east. Fridge SE. Sink North/East. Never place stove and sink adjacent — fire + water conflict.`}
+
+];
+
+// Nakshatra descriptions
+function getNakshatraDesc(idx) {
+  const descs = [
+    'అశ్వని — వేగం, ఆరోగ్యం, నూతన ప్రారంభాలకు శుభం. వైద్యానికి, ప్రయాణానికి అనుకూలం (పర్లేదు ✅).',
+    'భరణి — శ్రమ, సంకల్పానికి అనుకూలం (పర్లేదు ✅). క్రొత్త వ్యాపారానికి జాగ్రత్త.',
+    'కృత్తిక — అగ్ని నక్షత్రం (మీరు పుట్టిన star ⭐). శక్తివంతం. వివాహానికి జాగ్రత్త.',
+    'రోహిణి — అత్యుత్తమ నక్షత్రం (మీరు పుట్టిన star ⭐)! వివాహం, గృహప్రవేశం, వ్యాపారానికి అనుకూలం (పర్లేదు ✅).',
+    'మృగశిర — సౌమ్యం, సంగీతం, ప్రయాణానికి శుభం.',
+    'ఆర్ద్ర — తీవ్రత, కష్టసాధ్యమైన పనులకు జాగ్రత్త.',
+    'పునర్వసు — పునరుద్ధరణ, శుభ పనులకు మంచిది.',
+    'పుష్యమి — సర్వశ్రేష్ఠ నక్షత్రం (మీరు పుట్టిన star ⭐)! అన్ని శుభ పనులకు అనుకూలం (పర్లేదు ✅).',
+    'ఆశ్లేష — జాగ్రత్త అవసరం. ముఖ్య పనులు వాయిదా వేయండి.',
+    'మఖ — పితృకార్యాలకు అనుకూలం (పర్లేదు ✅). నూతన ప్రారంభాలకు జాగ్రత్త.',
+    'పూర్వఫల్గుని — సంతోషం, వివాహానికి అనుకూలం (పర్లేదు ✅).',
+    'ఉత్తరఫల్గుని — వివాహం, వ్యాపారానికి చాలా మంచిది ⭐.',
+    'హస్త — నైపుణ్యం, వ్యాపారానికి అనుకూలం (పర్లేదు ✅).',
+    'చిత్త — సౌందర్యం, కళలకు అనుకూలం (పర్లేదు ✅). వ్యాపారానికి మంచిది.',
+    'స్వాతి — స్వాతంత్ర్యం, వ్యాపార deals కి శుభం.',
+    'విశాఖ — ఉద్దేశ్య సాధనకు అనుకూలం (పర్లేదు ✅).',
+    'అనూరాధ — స్నేహం, సంఘటన, ప్రయాణానికి శుభం.',
+    'జ్యేష్ఠ — జాగ్రత్త. ముఖ్య పనులు చేయవద్దు ❌.',
+    'మూల — పునాదులు. నూతన ప్రారంభానికి జాగ్రత్త.',
+    'పూర్వాషాఢ — శుద్ధి, నూతన ప్రారంభానికి అనుకూలం (పర్లేదు ✅).',
+    'ఉత్తరాషాఢ — విజయం, వివాహానికి అనుకూలం (పర్లేదు ✅).',
+    'శ్రావణ — అభ్యసనం, విద్యకు చాలా మంచిది ⭐.',
+    'ధనిష్ఠ — సంపద, సంగీతానికి అనుకూలం (పర్లేదు ✅).',
+    'శతభిషం — వైద్యానికి అనుకూలం (పర్లేదు ✅).',
+    'పూర్వభాద్ర — జాగ్రత్త అవసరం.',
+    'ఉత్తరభాద్ర — విజ్ఞానం, ధర్మానికి అనుకూలం (పర్లేదు ✅).',
+    'రేవతి — సమాప్తి, ప్రయాణం, వివాహానికి శుభం.'
+  ];
+  return descs[idx] || descs[0];
+}
+
+
+function vastusearch(q) {
+  // Normalize query — remove punctuation, question words, fillers
+  const orig = q;
+  q = q.toLowerCase()
+    .replace(/[?!.,]/g, '')
+    .replace(/can i|should i|is it ok|is it good|where to|how to|what about|tell me|advise|suggest|please|pls|kindly|want to know|explain|about|for|my|our|the|a |an /g, ' ')
+    .replace(/\s+/g, ' ').trim();
+
+  const words = q.split(/\s+/).filter(w => w.length >= 2);
+
+  let best = null, bestScore = 0;
+
+  for(const entry of EXPERT_KB) {
+    let score = 0;
+    for(const k of entry.keys) {
+      const kl = k.toLowerCase();
+      // Exact full phrase match (strongest signal)
+      if(q.includes(kl)) {
+        score += kl.length * 4;
+        continue;
+      }
+      // Partial word match — each word in key against each word in query
+      const kwords = kl.split(/\s+/).filter(w => w.length >= 2);
+      for(const kw of kwords) {
+        for(const qw of words) {
+          if(qw === kw) { score += kw.length * 3; }                    // exact word
+          else if(qw.includes(kw) || kw.includes(qw)) { score += kw.length * 2; } // partial
+          else if(kw.length > 3 && qw.length > 3) {
+            // Fuzzy: first 3 chars match
+            if(kw.substring(0,3) === qw.substring(0,3)) score += 3;
+          }
+        }
+      }
+    }
+    if(score > bestScore) { bestScore = score; best = entry; }
+  }
+
+  // Threshold: if score good enough, use it
+  if(bestScore >= 6 && best) {
+    return best.fn ? best.fn() : best.ans;
+  }
+
+  // Smart fallback with topic detection
+  return smartFallback(q, words);
+}
+
+function smartFallback(q, words) {
+  const topicMap = [
+    { w:['mirror','అద్దం'],                      ans:'mirror' },
+    { w:['hall','living','lounge','drawing'],     ans:'living' },
+    { w:['stair','stairs','మెట్లు'],              ans:'stair' },
+    { w:['garage','parking','car park'],          ans:'garage' },
+    { w:['well','borewell','water tank','overhead','tank'], ans:'water' },
+    { w:['safe','vault','cash','locker'],          ans:'money' },
+    { w:['clock','wall clock','గడియారం'],         ans:'clock' },
+    { w:['photo','picture','painting','ఫోటో'],    ans:'photo' },
+    { w:['sofa','couch','furniture','bed'],        ans:'furniture' },
+    { w:['tv','television','టీవీ'],               ans:'tv' },
+    { w:['window','కిటికీ','ventilation'],        ans:'window' },
+    { w:['store','storage','స్టోర్'],             ans:'store' },
+    { w:['aquarium','fish','fish tank'],           ans:'aquarium' },
+    { w:['office','work','desk','కార్యాలయం'],     ans:'business' },
+    { w:['child','baby','kids','పిల్లలు'],        ans:'study' },
+    { w:['rent','tenant','అద్దె'],                ans:'rent' },
+  ];
+  for(const t of topicMap) {
+    if(t.w.some(w => q.includes(w) || words.some(wd => wd.includes(w) || w.includes(wd)))) {
+      return getSmartAnswer(t.ans, q);
+    }
+  }
+  return `🕉️ నమస్కారం! మీ ప్రశ్న అర్థమైంది 🙏
+
+మరింత specific గా అడగండి. ఉదాహరణలు:
+• "నా hall లో mirror ఉంచవచ్చా?"
+• "Staircase ఎక్కడ ఉండాలి?"
+• "TV ఏ గోడకు పెట్టాలి?"
+• "వివాహ ముహూర్తం చెప్పండి"
+• "నేడు శుభమా?"
+• "North facing house vastu"
+• "Kitchen colors ఏవి?"
+
+ఏ topic అయినా అడగండి — instant జవాబు ఇస్తాను! 🙂`;
+}
+
+function getSmartAnswer(topic, q) {
+  const answers = {
+    mirror: `🕉️ అద్దం (Mirror) వాస్తు:
+
+✅ శుభ స్థానాలు:
+• ఉత్తర గోడ — సంపద రెట్టింపు అవుతుందని నమ్మకం
+• తూర్పు గోడ — ఇల్లు bright అవుతుంది, positive energy
+• Hall/living room ఉత్తర గోడ — చాలా మంచిది ⭐
+
+❌ వర్జించవలసినవి:
+• Main door కు ఎదురుగా — శక్తి వెనక్కి వెళ్ళిపోతుంది
+• Bedroom లో మంచానికి ఎదురుగా — నిద్ర భంగమవుతుంది
+• దక్షిణ గోడకు అద్దం — యమ దిశ, మంచిది కాదు ❌
+• Kitchen లో అద్దం — అగ్ని రెట్టింపు అవుతుంది
+
+🔧 Hall లో అద్దం:
+• ఉత్తర లేదా తూర్పు గోడకు పెట్టండి ✅
+• చతురస్రాకారం లేదా దీర్ఘచతురస్రం — శుభం
+• గుండ్రని అద్దం — neutral
+• Broken/cracked mirror వెంటనే తొలగించండి ❌
+
+💡 Science: North-wall mirrors reflect natural light deeper into the room, making spaces look larger and brighter — proven to improve mood.
+
+🌟 English: Place mirrors on North or East walls. Never opposite main door or facing bed. Rectangle shape is best.`,
+
+    living: `🕉️ లివింగ్ రూమ్ / Hall వాస్తు:
+
+✅ ఉత్తమ స్థానం: ఉత్తరం లేదా తూర్పు వైపు
+✅ Sofa: దక్షిణ లేదా పశ్చిమ గోడకు ఆనించండి
+✅ కూర్చున్నప్పుడు: తూర్పు లేదా ఉత్తరం చూడాలి
+✅ TV: తూర్పు లేదా దక్షిణ గోడకు
+
+🔧 Hall arrangement:
+• అద్దం ఉత్తర గోడకు
+• Indoor plants NE లేదా E corner లో
+• Sofa SW corner లో — యజమాని కూర్చోవడానికి
+• Light colors (cream, white) వాడండి
+• Clutter తొలగించండి — energy flow కోసం
+• Center (Brahmasthana) ఖాళీగా ఉంచండి
+
+💡 Science: North/East placement gets natural light most of the day. Open center improves air circulation.
+
+🌟 English: Living room in North/East is ideal. Sofa against South/West wall. Keep center open and clutter-free.`,
+
+    stair: `🕉️ మెట్లు (Staircase) వాస్తు:
+
+✅ ఉత్తమ స్థానాలు:
+• దక్షిణ లేదా పశ్చిమ వైపు — చాలా మంచిది ⭐
+• నైఋతి (దక్షిణ-పశ్చిమ మూల) (దక్షిణ-పశ్చిమ మూల 💪) కూడా అనుకూలం (పర్లేదు ✅)
+
+❌ వర్జించవలసినవి:
+• ఈశాన్యం (ఉత్తర-తూర్పు మూల) (ఉత్తర-తూర్పు మూల 🙏) — అత్యంత దోషం (సమస్య కలిగించే స్థానం), ఆర్థిక నష్టం
+• ఇంటి center (Brahmasthana) — health సమస్యలు
+• ముఖద్వారానికి ఎదురుగా
+
+✅ మెట్ల సంఖ్య: బేసి సంఖ్య (odd) — 11, 13, 15, 17...
+✅ మెట్లు clockwise తిరగాలి (సూర్యుని దిశలో)
+
+🔧 నేడే:
+• NE లో staircase ఉంటే — red light వెలిగించండి
+• మెట్ల కింద storage మాత్రమే — పూజ వద్దు
+• Broken steps వెంటనే fix చేయండి
+
+🌟 English: Staircase in South or West is ideal. Odd number of steps, clockwise rotation. Never in NE corner.`,
+
+    water: `🕉️ నీటి వనరులు — Overhead Tank, Borewell వాస్తు:
+
+✅ Overhead Water Tank:
+• పశ్చిమం (W) లేదా నైఋతి (దక్షిణ-పశ్చిమ మూల) (దక్షిణ-పశ్చిమ మూల 💪) — ఉత్తమం
+• దక్షిణం (S) కూడా అనుకూలం (పర్లేదు ✅)
+
+✅ Underground Sump/Borewell:
+• ఈశాన్యం (ఉత్తర-తూర్పు మూల) (ఉత్తర-తూర్పు మూల 🙏) లేదా ఉత్తరం — చాలా మంచిది ⭐
+• తూర్పు కూడా మంచిది
+
+❌ వర్జించవలసినవి:
+• Overhead tank NE లో — ఆర్థిక నష్టం, ఆరోగ్య సమస్యలు
+• Borewell SW లో — కుటుంబ కలహాలు
+
+🔧 నేడే:
+• Water leaks వెంటనే fix చేయండి — సంపద వృధా
+• Tank clean చేయండి నెలకొకసారి
+• నీళ్ళు ఒలికిపోకుండా జాగ్రత్తగా ఉంచండి
+
+🌟 English: Underground water in NE/North. Overhead tank in West/SW. Fix all leaks immediately.`,
+
+    clock: `🕉️ గడియారం (Wall Clock) వాస్తు:
+
+✅ శుభ స్థానాలు:
+• ఉత్తర గోడ — సమయం & opportunity forward move అవుతాయి
+• తూర్పు గోడ — ఉదయం సూర్యుని శక్తి
+• పశ్చిమం కూడా అనుకూలం (పర్లేదు ✅)
+
+❌ వర్జించవలసినవి:
+• దక్షిణ గోడకు clock — time loss, delay in everything
+• Main door పైన — అతిథులు తక్కువగా వస్తారు
+• Stopped/broken clock — వెంటనే తీసివేయండి ❌
+
+✅ Clock shape: Round లేదా Square — శుభం
+❌ Pendulum clock bedroom లో చేయవద్దు ❌ — sleep disturb
+
+🌟 English: Wall clock on North or East wall. Never on South wall. Remove/fix stopped clocks immediately — they symbolize stagnation.`,
+
+    photo: `🕉️ ఫోటోలు & Paintings వాస్తు:
+
+✅ శుభ ఫోటోలు:
+• దేవతల ఫోటోలు — ఈశాన్యం (ఉత్తర-తూర్పు మూల) లేదా తూర్పు గోడ
+• కుటుంబ ఫోటోలు — తూర్పు లేదా ఉత్తర గోడ
+• Nature scenes (mountains, rivers) — ఉత్తరం లేదా తూర్పు
+• Running horses — ఉత్తర గోడ (7 horses = సంపద)
+• Rising sun — తూర్పు గోడ
+
+❌ వర్జించవలసినవి:
+• దక్షిణ గోడకు deceased family members ఫోటోలు
+• War/violence scenes — negative energy
+• Crying/sad images — depression
+• Wild animals ఫోటోలు hall లో
+
+🔧 నేడే:
+• Dusty frames clean చేయండి
+• Broken frames తొలగించండి
+• Positive, uplifting images పెట్టండి
+
+🌟 English: Divine/family photos on East/North walls. Avoid sad or violent imagery. 7 running horses on North wall attract prosperity.`,
+
+    tv: `🕉️ టీవీ (Television) వాస్తు:
+
+✅ TV పెట్టాల్సిన గోడ:
+• తూర్పు గోడకు TV — చూసేవారు పశ్చిమం చూస్తారు ✅
+• దక్షిణ గోడకు TV — చూసేవారు ఉత్తరం చూస్తారు ✅
+
+❌ వర్జించవలసినవి:
+• TV ఉత్తర గోడకు పెట్టవద్దు — చూసేవారు దక్షిణం చూస్తారు
+• Bedroom లో TV — నిద్ర సమస్యలు, relationships affect
+• TV screen అద్దంలా reflect అయితే — mirror effect దోషం (సమస్య కలిగించే స్థానం)
+
+🔧 నేడే:
+• TV off అయినప్పుడు cover చేయండి
+• Bedroom TV చేయవద్దు ❌
+• TV కింద messy wires తొలగించండి
+
+🌟 English: TV on East or South wall so viewers face West/North. Avoid TV in bedroom for better sleep and relationships.`,
+
+    furniture: `🕉️ Furniture వాస్తు:
+
+✅ ముఖ్య నియమాలు:
+• Heavy furniture SW కోణంలో — గృహస్వామికి శక్తి
+• Sofa south లేదా west గోడకు ఆనించండి
+• Dining table square లేదా rectangle — శుభం
+• Study table తూర్పు ముఖంగా
+• మంచం SW corner లో — head దక్షిణంగా
+
+❌ వర్జించవలసినవి:
+• Furniture center (Brahmasthana) లో ఉంచవద్దు
+• Round dining table — neutral (avoid)
+• Furniture walls కు చాలా దగ్గరగా — energy blocked
+
+🔧 నేడే:
+• Broken furniture fix చేయండి లేదా తీసివేయండి
+• Furniture move చేసి clean చేయండి under/behind
+• Clutter తొలగించండి
+
+🌟 English: Heavy furniture in SW. Sofa against South/West walls. Keep Brahmasthana (center) clear.`,
+
+    window: `🕉️ కిటికీలు (Windows) వాస్తు:
+
+✅ ఉత్తమ స్థానాలు:
+• తూర్పు, ఉత్తరం — maximum సూర్యకాంతి, fresh air ✅
+• పశ్చిమం — సాయంత్రం light, మంచిది
+
+❌ తక్కువగా ఉంచవలసినవి:
+• దక్షిణం — afternoon harsh heat
+• నైఋతి (దక్షిణ-పశ్చిమ మూల) (దక్షిణ-పశ్చిమ మూల 💪) — minimize openings
+
+✅ నియమాలు:
+• ఉదయం 6-9 AM తూర్పు కిటికీలు తెరవండి — UV rays, fresh air
+• Cross ventilation — N-S లేదా E-W windows ఉంటే ideal
+• Windows outward open అవ్వాలి (inward కాదు)
+
+💡 Science: Cross-ventilation reduces indoor CO2 by 40%. Morning UV kills 99% bacteria. Natural light improves productivity 15%.
+
+🌟 English: Maximum windows on East/North. Open them every morning. Cross-ventilation (opposite walls) is ideal.`,
+
+    aquarium: `🕉️ Aquarium / Fish Tank వాస్తు:
+
+✅ అత్యుత్తమ స్థానాలు:
+• ఉత్తరం — కుబేర (సంపద దేవుడు 💰) దిశ, సంపద వస్తుంది
+• తూర్పు — positive energy
+• ఈశాన్యం (ఉత్తర-తూర్పు మూల) — ఆధ్యాత్మిక శక్తి + సంపద
+
+❌ వర్జించవలసినవి:
+• Bedroom లో — నిద్ర disturb అవుతుంది
+• Kitchen లో — అగ్ని + నీరు conflict
+• దక్షిణం లేదా SW — negative
+
+✅ Fish details:
+• 9 fish (8 golden + 1 black) — lucky combination
+• Black fish negative energy absorb చేస్తుంది
+• Fish చనిపోతే — వెంటనే replace చేయండి
+
+🔧 నేడే:
+• Tank clean చేయండి — stagnant water negative
+• Running filter/pump ఉండాలి — flowing water = flowing money
+
+🌟 English: Aquarium in North is best (Kubera's direction). 9 fish (8 gold + 1 black). Keep water clean and flowing.`,
+
+    rent: `🕉️ అద్దె ఇల్లు / Tenant వాస్తు:
+
+✅ అద్దెకు ఉన్న ఇంట్లో చేయగలిగేవి:
+• ఇంటిని daily clean చేయండి — Sea salt mopping
+• ఉత్తర-తూర్పు మూలలో (ఈశాన్యం (ఉత్తర-తూర్పు మూల)) దీపం/పూజ ఉంచండి
+• తూర్పు కిటికీలు ఉదయం తెరవండి
+• Indoor plants తూర్పు/ఉత్తరంలో పెట్టండి
+• Entrance దగ్గర రంగవల్లి/తోరణం
+
+❌ పెద్ద మార్పులు అవసరం లేదు:
+• Construction లేకుండా small remedies చేయవచ్చు
+• Furniture re-arrange చేయవచ్చు
+
+🔧 Quick remedies:
+• Salt water mopping weekly — clears negative energy
+• Wind chimes entrance దగ్గర (NW side)
+• Mirror ఉత్తర గోడకు
+• Crystal/plants NE corner లో
+
+🌟 English: In rented homes, use salt mopping, indoor plants, lamps in NE, and mirrors on North wall. No construction needed.`,
+
+    store: `🕉️ Store Room / Storage వాస్తు:
+
+✅ ఉత్తమ స్థానాలు:
+• నైఋతి (దక్షిణ-పశ్చిమ మూల) (దక్షిణ-పశ్చిమ మూల 💪) — heavy items, storage చాలా మంచిది ⭐
+• దక్షిణం లేదా పశ్చిమం — కూడా అనుకూలం (పర్లేదు ✅)
+
+❌ వర్జించవలసినవి:
+• ఉత్తర-తూర్పు మూలలో (ఈశాన్యం (ఉత్తర-తూర్పు మూల)) store — అత్యంత దోషం (సమస్య కలిగించే స్థానం)
+• ఉత్తరంలో store — కుబేర (సంపద దేవుడు 💰) శక్తి blocked అవుతుంది
+
+✅ నియమాలు:
+• Store room door outward open అవ్వాలి
+• Regular cleaning — stale energy తొలగుతుంది
+• Broken/unused items చేయవద్దు ❌
+
+🌟 English: Store room in SW is ideal. Never in NE. Clean regularly and remove broken/unused items.`,
+
+    garage: `🕉️ గ్యారేజ్ / Parking వాస్తు:
+
+✅ ఉత్తమ స్థానాలు:
+• వాయవ్యం (ఉత్తర-పశ్చిమ మూల) (ఉత్తర-పశ్చిమ మూల 💨) — చాలా మంచిది ⭐
+• తూర్పు లేదా దక్షిణం — అనుకూలం (పర్లేదు ✅)
+
+❌ వర్జించవలసినవి:
+• ఈశాన్యం (ఉత్తర-తూర్పు మూల) (ఉత్తర-తూర్పు మూల 🙏) — ఆర్థిక సమస్యలు
+• నైఋతి (దక్షిణ-పశ్చిమ మూల) (దక్షిణ-పశ్చిమ మూల 💪) — గృహస్వామి energy drain
+
+✅ Tips:
+• Car park చేసేటప్పుడు hood (engine) తూర్పు లేదా ఉత్తరంగా
+• Garage door outward open అవ్వాలి
+• Oil leaks — వెంటనే fix చేయండి (wealth drain)
+
+🌟 English: Garage in NW is ideal. Park car with engine facing East/North. Fix all oil leaks immediately.`,
+
+    business: `🕉️ Office/Business వాస్తు:
+
+✅ Office లో ముఖ్య నియమాలు:
+• Owner/Boss seat: SW corner లో ఉత్తరం లేదా తూర్పు ముఖంగా
+• Cash register/locker: SW లో — ఉత్తరం తెరవాలి
+• Entrance: తూర్పు లేదా ఉత్తరం — చాలా మంచిది ⭐
+• Pantry/Kitchen: SE
+
+🔧 Vastu tips for success:
+• Ganesh/Lakshmi photo entrance దగ్గర
+• Aquarium ఉత్తరంలో — business growth
+• No clutter on desk — clear thinking
+• Green plants NE corner లో
+• Running water fountain north లో
+
+❌ వర్జించవలసినవి:
+• Back to door కూర్చోవడం
+• Heavy items N లేదా NE లో
+• Broken equipment వెంటనే fix
+
+🌟 English: Owner faces North/East from SW corner. Cash in SW. Entrance facing East/North. Declutter regularly.`
+  };
+  return answers[topic] || answers.living;
+}
+
+
+// ============ AI CHAT — Real-time via Pollinations.ai (Free, No API Key) ============
+const GURU_SYSTEM = `మీరు India లో అత్యుత్తమ వాస్తు శాస్త్ర నిపుణుడు మరియు జీవిత సలహాదారుడు. మీరు చాలా సులభమైన తెలుగులో మాట్లాడతారు — అందరికీ అర్థమయ్యేలా.
+
+మీరు ఇవన్నీ advise చేయగలరు:
+- వాస్తు శాస్త్రం (ఇల్లు, office, దిశలు, గదులు)
+- శుభ సమయాలు (పెళ్లి, గృహప్రవేశం, వ్యాపారం, ప్రయాణం, కారు కొనడం, వైద్యం)
+- పంచాంగం (నక్షత్రం, రాహు కాలం, శుభ సమయం)
+- జీవిత నిర్ణయాలు
+
+LANGUAGE RULES — చాలా ముఖ్యం:
+- చాలా simple తెలుగు వాడండి — 10వ class విద్యార్థికి కూడా అర్థమయ్యేలా
+- కష్టమైన పదాలు వాడితే వెంటనే bracket లో explain చేయండి
+  Examples:
+  ❌ "వర్జించండి" వాడవద్దు → ✅ "చేయవద్దు" అనండి
+  ❌ "అభిజిత్ ముహూర్తం" మాత్రమే కాదు → ✅ "అభిజిత్ (రోజులో మంచి సమయం 11:48-12:36)" అనండి
+  ❌ "ఈశాన్యం" మాత్రమే కాదు → ✅ "ఈశాన్యం (ఉత్తర-తూర్పు మూల)" అనండి
+  ❌ "రాహు కాలం" మాత్రమే కాదు → ✅ "రాహు కాలం (ఈ సమయంలో పని చేయవద్దు)" అనండి
+
+ALWAYS ఈ format వాడండి:
+🕉️ విషయం ఏమిటంటే:
+[2-3 simple తెలుగు వాక్యాలు]
+
+✅ మీరు చేయవలసినది:
+[Specific గా ఏం చేయాలో చెప్పండి]
+
+🔧 ఇప్పుడే చేయగలిగేవి (construction అక్కర లేదు):
+• [tip 1 — simple గా]
+• [tip 2]
+• [tip 3]
+
+🌟 Short English:
+[1-2 sentences]
+
+💡 ఎందుకు పని చేస్తుంది:
+[Science లేదా logic లో ఒక్క line]
+
+IMPORTANT RULES:
+- ideal స్థానం possible కాకపోతే BEST ALTERNATIVE తప్పనిసరిగా చెప్పండి
+- "మంచిది కాదు" అని మాత్రమే చెప్పవద్దు — solution కూడా చెప్పండి
+- Marriage/griha pravesh అడిగితే: నేటి నక్షత్రం చెప్పి శుభమా కాదా చెప్పండి
+- Skeptic అయితే: Science explain చేయండి
+- మీరు అని address చేయండి`;
+
+async function sendMsg() {
+  const inp = document.getElementById('chat-in');
+  const msg = inp.value.trim();
+  if(!msg) return;
+  inp.value='';
+  const box = document.getElementById('chat-box');
+  const btn = document.getElementById('send-btn');
+  const time = new Date().toLocaleTimeString('te-IN',{hour:'2-digit',minute:'2-digit'});
+
+  // User message
+  box.innerHTML += `<div class="msg"><div class="av user">👤</div><div class="bubble user"><div>${msg}</div><div style="font-size:10px;opacity:0.4;margin-top:3px">${time}</div></div></div>`;
+
+  // Typing indicator
+  const tid = 'typing-'+Date.now();
+  box.innerHTML += `<div class="msg" id="${tid}"><div class="av">🕉️</div><div class="bubble"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>`;
+  box.scrollTop = box.scrollHeight;
+  btn.disabled = true;
+
+  // Add today's panchanga context to the question
+  const p = getTodayPanchanga();
+  const fullMsg = `నేటి పంచాంగం (తెలుగు calendar 📅): వారం=${p.vara}, నక్షత్రం (మీరు పుట్టిన star ⭐)=${p.nak}, తిథి (చంద్రుని ప్రకారం రోజు 🌙)=${p.tithi}, యోగం (రోజు స్వభావం 🔯)=${p.yoga}
+
+ప్రశ్న: ${msg}`;
+
+  try {
+    // Pollinations.ai POST — handles long system prompts properly, no API key needed
+    const res = await fetch('https://text.pollinations.ai/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'openai',
+        messages: [
+          { role: 'system', content: (typeof getGuruSystem === 'function' ? getGuruSystem() : GURU_SYSTEM) },
+          { role: 'user',   content: fullMsg }
+        ],
+        seed: Math.floor(Math.random() * 9999),
+        jsonMode: false
+      })
+    });
+
+    document.getElementById(tid)?.remove();
+
+    if(res.ok) {
+      const reply = await res.text();
+      if(reply && reply.length > 30 && !reply.startsWith('<!') && !reply.includes('"error"')) {
+        box.innerHTML += `<div class="msg"><div class="av">🕉️</div><div class="bubble"><div style="font-size:14px;line-height:1.9;white-space:pre-wrap">${reply}</div><div style="font-size:10px;opacity:0.4;margin-top:3px">🔮 AI గురువు (live) • ${time}</div></div></div>`;
+      } else {
+        throw new Error('invalid response');
+      }
+    } else {
+      throw new Error('http ' + res.status);
+    }
+  } catch(e) {
+    document.getElementById(tid)?.remove();
+    // Offline fallback — smart KB
+    const reply = vastusearch(msg);
+    box.innerHTML += `<div class="msg"><div class="av">🕉️</div><div class="bubble"><div style="font-size:14px;line-height:1.9;white-space:pre-wrap">${reply}</div><div style="font-size:10px;opacity:0.4;margin-top:3px">📚 గురువు (offline) • ${time}</div></div></div>`;
+  }
+
+  btn.disabled = false;
+  box.scrollTop = box.scrollHeight;
+}
+
+
+// ============ VOICE / MIC ============
+let micActive = false;
+let recognition = null;
+
+function toggleMic() {
+  const btn = document.getElementById('mic-btn');
+  const status = document.getElementById('mic-status');
+  const inp = document.getElementById('chat-in');
+
+  // Stop if active
+  if(micActive && recognition) {
+    recognition.stop();
+    return;
+  }
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) {
+    status.textContent = '⚠️ మీ browser లో voice support లేదు — Chrome use చేయండి';
+    return;
+  }
+
+  recognition = new SR();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'te-IN'; // Telugu first
+
+  recognition.onstart = () => {
+    micActive = true;
+    btn.textContent = '🔴';
+    btn.style.background = 'rgba(139,37,0,0.4)';
+    btn.style.borderColor = '#E8651A';
+    status.textContent = '🎤 మాట్లాడండి... (Speaking — Telugu or English)';
+  };
+
+  recognition.onresult = (e) => {
+    let transcript = '';
+    for(let i = e.resultIndex; i < e.results.length; i++) {
+      transcript += e.results[i][0].transcript;
+    }
+    inp.value = transcript;
+    if(e.results[e.results.length-1].isFinal) {
+      status.textContent = '✅ విన్నాను! Send నొక్కండి లేదా మళ్ళీ మాట్లాడండి';
+    }
+  };
+
+  recognition.onerror = (e) => {
+    micActive = false;
+    btn.textContent = '🎤';
+    btn.style.background = 'rgba(212,160,23,0.15)';
+    btn.style.borderColor = 'rgba(212,160,23,0.35)';
+    if(e.error === 'not-allowed') {
+      status.textContent = '⚠️ Microphone permission ఇవ్వండి — browser settings లో';
+    } else if(e.error === 'no-speech') {
+      status.textContent = '⚠️ మాట వినలేదు — మళ్ళీ try చేయండి';
+    } else {
+      status.textContent = '⚠️ Error: ' + e.error;
+    }
+  };
+
+  recognition.onend = () => {
+    micActive = false;
+    btn.textContent = '🎤';
+    btn.style.background = 'rgba(212,160,23,0.15)';
+    btn.style.borderColor = 'rgba(212,160,23,0.35)';
+    // Auto-send if text is there
+    const txt = document.getElementById('chat-in').value.trim();
+    if(txt) {
+      status.textContent = '⏳ పంపుతున్నాం...';
+      setTimeout(() => sendMsg(), 400);
+    }
+  };
+
+  // Try Telugu, fallback to English if fails
+  try {
+    recognition.start();
+  } catch(err) {
+    recognition.lang = 'en-IN';
+    recognition.start();
+  }
+}
+
+
+// ============ MONTHLY MUHURTHAS ============
+let currentMonthOffset = 0; // 0 = this month, 1 = next, -1 = prev
+
+const TE_MONTHS = ['జనవరి','ఫిబ్రవరి','మార్చి','ఏప్రిల్','మే','జూన్',
+                   'జులై','ఆగస్ట్','సెప్టెంబర్','అక్టోబర్','నవంబర్','డిసెంబర్'];
+const TE_WEEKDAYS_SHORT = (getLang().dayNames||['ఆదివారం','సోమవారం','మంగళవారం','బుధవారం','గురువారం','శుక్రవారం','శనివారం']).map(function(d){return d.substring(0,3);});
+
+// Rahu Kalam hours per weekday [start, end]
+const RAHU = {0:[16.5,18],1:[7.5,9],2:[15,16.5],3:[12,13.5],4:[13.5,15],5:[10.5,12],6:[9,10.5]};
+const ABHIJIT = {0:'11:48–12:36',1:'11:44–12:32',2:'11:44–12:32',3:'11:44–12:32',4:'11:44–12:32',5:'11:44–12:32',6:'11:48–12:36'};
+
+// Good nakshatras for auspicious work
+const GOOD_NAKS = ['రోహిణి','మృగశిర','పుష్యమి','హస్త','చిత్త','స్వాతి','అనూరాధ','శ్రావణ','ధనిష్ఠ','రేవతి','అశ్వని','పునర్వసు'];
+const BAD_NAKS  = ['ఆర్ద్ర','ఆశ్లేష','మఖ','జ్యేష్ఠ','మూల','కృత్తిక'];
+const OK_TITHIS = [1,2,3,5,6,7,10,11,12]; // good tithi numbers (1-indexed)
+const BAD_TITHIS = [4,8,9,14]; // chaturthi, ashtami, navami, chaturdashi
+
+function getDayRating(date) {
+  const dw  = date.getDay();
+  const dn  = date.getDate() + date.getMonth() * 3;
+  const nak = NAKSH[dn % 27].t;
+  const tit = (dn % 15) + 1;
+
+  let score = 50; // neutral base
+  const reasons = { good:[], bad:[] };
+
+  // Weekday bonus
+  if(dw === 4) { score += 30; reasons.good.push('గురువారం — బృహస్పతి వాసరం (ఆ రోజు పాలించే గ్రహం) ✨'); }
+  else if(dw === 3) { score += 20; reasons.good.push('బుధవారం — విద్య, వ్యాపారానికి శుభం'); }
+  else if(dw === 5) { score += 20; reasons.good.push('శుక్రవారం — లక్ష్మీ కటాక్షం'); }
+  else if(dw === 0) { score += 15; reasons.good.push('ఆదివారం — సూర్య వాసరం (ఆ రోజు పాలించే గ్రహం)'); }
+  else if(dw === 1) { score += 10; reasons.good.push('సోమవారం — శివుని వాసరం (ఆ రోజు పాలించే గ్రహం)'); }
+  else if(dw === 6) { score -= 15; reasons.bad.push('శనివారం — జాగ్రత్త అవసరం'); }
+  else if(dw === 2) { score -= 10; reasons.bad.push('మంగళవారం — నిర్మాణం చేయవద్దు ❌'); }
+
+  // Nakshatra
+  if(GOOD_NAKS.includes(nak)) { score += 20; reasons.good.push(`${nak} నక్షత్రం (మీరు పుట్టిన star ⭐) — శుభం`); }
+  else if(BAD_NAKS.includes(nak)) { score -= 25; reasons.bad.push(`${nak} నక్షత్రం (మీరు పుట్టిన star ⭐) — చేయవద్దు ❌`); }
+
+  // Tithi
+  if(OK_TITHIS.includes(tit % 15)) { score += 15; reasons.good.push(`${TITHI[(tit-1)%15]} — శుభ తిథి (చంద్రుని ప్రకారం రోజు 🌙)`); }
+  else if(BAD_TITHIS.includes(tit % 15)) { score -= 20; reasons.bad.push(`${TITHI[(tit-1)%15]} — అశుభ తిథి (చంద్రుని ప్రకారం రోజు 🌙)`); }
+
+  score = Math.max(5, Math.min(99, score));
+
+  let rating, color, bg, border, icon;
+  if(score >= 75)      { rating=getLang().goodRating||'🟢 శుభం'; color='#7dd67d'; bg='rgba(45,106,45,0.3)'; border='rgba(45,106,45,0.6)'; icon='🟢'; }
+  else if(score >= 50) { rating=getLang().okRating||'🟡 సాధారణం'; color='#F5C842'; bg='rgba(212,160,23,0.15)'; border='rgba(212,160,23,0.4)'; icon='🟡'; }
+  else                 { rating=getLang().badRating||'🔴 జాగ్రత్త'; color='#ff9974'; bg='rgba(139,37,0,0.25)'; border='rgba(139,37,0,0.5)'; icon='🔴'; }
+
+  return { score, rating, color, bg, border, icon, reasons,
+           nak, tit: TITHI[(tit-1)%15], dw,
+           rahuStart: RAHU[dw][0], rahuEnd: RAHU[dw][1],
+           abhijit: ABHIJIT[dw] };
+}
+
+function fmtH(h){ const hh=Math.floor(h),mm=Math.round((h-hh)*60); return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`; }
+
+function buildMonthCalendar(year, month) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const firstDay = new Date(year, month, 1);
+  const lastDay  = new Date(year, month+1, 0);
+  const startDow = firstDay.getDay(); // 0=Sun
+  const totalDays = lastDay.getDate();
+
+  // Update labels
+  document.getElementById('month-label').textContent = `${TE_MONTHS[month]} ${year}`;
+  document.getElementById('monthly-title').textContent = `📆 ${TE_MONTHS[month]} ${year} — శుభ ముహూర్తాలు (శుభ సమయాలు)`;
+  document.getElementById('best-days-title').textContent = `⭐ ${TE_MONTHS[month]} లో అత్యుత్తమ దినాలు`;
+
+  // Weekday headers
+  let html = `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px;">`;
+  TE_WEEKDAYS_SHORT.forEach(d => {
+    html += `<div style="text-align:center;font-size:11px;color:rgba(212,160,23,0.7);padding:4px 0;font-weight:bold;">${d}</div>`;
+  });
+  html += `</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;">`;
+
+  // Empty cells before first day
+  for(let i=0; i<startDow; i++) html += `<div></div>`;
+
+  // Day cells
+  const bestDays = [];
+  for(let day=1; day<=totalDays; day++) {
+    const date = new Date(year, month, day);
+    const isToday = date.getTime() === today.getTime();
+    const r = getDayRating(date);
+    if(r.score >= 75) bestDays.push({day, ...r});
+
+    const todayBorder = isToday ? `box-shadow:0 0 0 2px #4A90B8;` : '';
+    const todayBg = isToday ? 'rgba(74,144,184,0.25)' : r.bg;
+
+    html += `<div onclick="showDayDetail(${year},${month},${day})"
+      style="background:${todayBg};border:1px solid ${r.border};border-radius:8px;
+             padding:6px 3px;text-align:center;cursor:pointer;${todayBorder}
+             min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;">
+      ${isToday ? '<div style="font-size:9px;color:#4A90B8;font-weight:bold;">'+getLang().todayLbl+'</div>' : ''}
+      <div style="font-size:16px;color:${r.color};font-weight:bold;">${day}</div>
+      <div style="font-size:14px;">${r.icon}</div>
+      <div style="font-size:9px;color:${r.color};opacity:0.9;">${r.rating}</div>
+    </div>`;
+  }
+  html += `</div>`;
+  document.getElementById('monthly-calendar').innerHTML = html;
+
+  // Best days list
+  let bestHtml = '';
+  if(bestDays.length === 0) {
+    bestHtml = '<div style="font-size:14px;color:rgba(253,246,227,0.5);text-align:center;padding:10px;">ఈ నెలలో అత్యుత్తమ దినాలు లేవు</div>';
+  } else {
+    bestDays.forEach(({day,rating,color,nak,tit,dw,abhijit,reasons}) => {
+      const dNames=getLang().dayNames||['ఆదివారం','సోమవారం','మంగళవారం','బుధవారం','గురువారం','శుక్రవారం','శనివారం'];
+      bestHtml += `<div onclick="showDayDetail(${year},${month},${day})"
+        style="background:rgba(45,106,45,0.15);border:1px solid rgba(45,106,45,0.35);
+               border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:17px;color:#F5C842;font-weight:bold;">${TE_MONTHS[month]} ${day} — ${dNames[dw]}</div>
+          <span style="background:rgba(45,106,45,0.4);border:1px solid rgba(45,106,45,0.6);border-radius:20px;padding:2px 10px;font-size:12px;color:#7dd67d;">🟢 ${rating}</span>
+        </div>
+        <div style="font-size:13px;color:rgba(253,246,227,0.7);">
+          ⭐ నక్షత్రం (మీరు పుట్టిన star ⭐): ${nak} &nbsp;|&nbsp; 🌙 తిథి (చంద్రుని ప్రకారం రోజు 🌙): ${tit}<br>
+          ✅ అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) ముహూర్తం (శుభ సమయం) (రోజులో అత్యంత శుభ సమయం ⭐): ${abhijit}<br>
+          ${reasons.good.map(r=>`<span style="color:#7dd67d">✦ ${r}</span>`).join(' &nbsp; ')}
+        </div>
+      </div>`;
+    });
+  }
+  document.getElementById('best-days-list').innerHTML = bestHtml;
+}
+
+function showDayDetail(year, month, day) {
+  const date = new Date(year, month, day);
+  const r = getDayRating(date);
+  const dNames=getLang().dayNames||['ఆదివారం','సోమవారం','మంగళవారం','బుధవారం','గురువారం','శుక్రవారం','శనివారం'];
+
+  const card = document.getElementById('day-detail-card');
+  card.style.display = 'block';
+  document.getElementById('day-detail-title').textContent =
+    `📅 ${day} ${TE_MONTHS[month]} — ${dNames[r.dw]}`;
+
+  const goodList = r.reasons.good.map(x=>`<div style="color:#7dd67d;padding:3px 0;">✦ ${x}</div>`).join('');
+  const badList  = r.reasons.bad.map(x=>`<div style="color:#ff9974;padding:3px 0;">⚠ ${x}</div>`).join('');
+
+  document.getElementById('day-detail-content').innerHTML = `
+    <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <div style="background:${r.bg};border:1px solid ${r.border};border-radius:10px;padding:10px 14px;text-align:center;flex:1;">
+        <div style="font-size:28px;">${r.icon}</div>
+        <div style="font-size:18px;color:${r.color};">${r.rating}</div>
+        <div style="font-size:12px;opacity:0.6;">Score: ${r.score}/99</div>
+      </div>
+      <div style="flex:2;font-size:13px;line-height:1.9;color:rgba(253,246,227,0.8);">
+        ⭐ నక్షత్రం (మీరు పుట్టిన star ⭐): <b style="color:#F5C842">${r.nak}</b><br>
+        🌙 తిథి (చంద్రుని ప్రకారం రోజు 🌙): <b style="color:#F5C842">${r.tit}</b><br>
+        ✅ అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐): <b style="color:#7dd67d">${r.abhijit}</b><br>
+        ⚠️ రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు): <b style="color:#ff9974">${fmtH(r.rahuStart)}–${fmtH(r.rahuEnd)}</b>
+      </div>
+    </div>
+    <div style="margin-bottom:8px;font-size:14px;">${goodList}${badList}</div>
+    <div style="background:rgba(212,160,23,0.1);border-left:3px solid #D4A017;padding:10px 12px;border-radius:0 8px 8px 0;font-size:13px;">
+      <b style="color:#F5C842;">💡 ఈ రోజు శుభ పనులు:</b><br>
+      ${r.score>=75 ? 'గృహప్రవేశం, వివాహం, వ్యాపారం ప్రారంభం, నూతన వాహనం కొనుగోలు, పూజ' :
+        r.score>=50 ? 'సాధారణ పనులు చేయవచ్చు. ముఖ్యమైన నిర్ణయాలు అభిజిత్ (రోజులో అత్యంత శుభ సమయం ⭐) ముహూర్తం (శుభ సమయం) (రోజులో అత్యంత శుభ సమయం ⭐)లో చేయండి' :
+        'ముఖ్యమైన పనులు చేయవద్దు ❌. రాహు కాలం ⚠️ (ఈ సమయంలో పని చేయవద్దు) దాటిన తర్వాత చేయండి'}
+    </div>`;
+
+  document.getElementById('day-detail-ask').value =
+    `${day} ${TE_MONTHS[month]} ${dNames[r.dw]} రోజు వాస్తు శుభ ముహూర్తాలు (శుభ సమయాలు) మరియు చేయవలసిన పనులు వివరంగా చెప్పండి`;
+
+  card.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function changeMonth(delta) {
+  currentMonthOffset += delta;
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = d.getMonth() + currentMonthOffset;
+  const target = new Date(y, m, 1);
+  buildMonthCalendar(target.getFullYear(), target.getMonth());
+  document.getElementById('day-detail-card').style.display = 'none';
+}
+
+// Monthly tab init handled in switchTab above
+
+
+// ============ LIVE COMPASS — HIGH ACCURACY ENGINE ============
+// Uses true circular mean (sin/cos math) + EMA smoothing for rock-solid stability
+
+let cDisplayAngle = 0;   // what is drawn on canvas (animated)
+let cTargetAngle  = 0;   // smoothed heading from sensor
+let cEmaAngle     = -1;  // exponential moving average of raw heading
+let cActive       = false, cRAF = null;
+let cSensorWorking = false, cAbsoluteSupported = false;
+let cReadingCount  = 0;
+let cSinSum = 0, cCosSum = 0;   // running circular mean accumulators
+const WINDOW = 20;               // circular buffer size — bigger = smoother
+let cBuf = [];                   // ring buffer of raw readings (radians)
+let cRvalue = 0;                 // circular R-value: 1=perfect, 0=random
+
+// ---------- CIRCULAR MEAN (mathematically correct for angles) ----------
+function addReading(rawDeg) {
+  const rad = rawDeg * Math.PI / 180;
+
+  // Push into ring buffer, evict oldest
+  cBuf.push(rad);
+  if (cBuf.length > WINDOW) cBuf.shift();
+
+  // True circular mean using vector sum of unit vectors
+  let sinS = 0, cosS = 0;
+  for (let i = 0; i < cBuf.length; i++) {
+    sinS += Math.sin(cBuf[i]);
+    cosS += Math.cos(cBuf[i]);
+  }
+  const n   = cBuf.length;
+  const R   = Math.sqrt(sinS*sinS + cosS*cosS) / n; // 0..1, concentration
+  cRvalue   = R;
+  const meanRad = Math.atan2(sinS / n, cosS / n);
+  const meanDeg = ((meanRad * 180 / Math.PI) + 360) % 360;
+
+  // Layer 2: Exponential Moving Average on top of circular mean
+  // alpha = 0.25: responds quickly but still smoothed
+  if (cEmaAngle < 0) {
+    cEmaAngle = meanDeg;
+  } else {
+    // EMA on circular domain (handle 0/360 wrap)
+    let delta = meanDeg - cEmaAngle;
+    if (delta >  180) delta -= 360;
+    if (delta < -180) delta += 360;
+    cEmaAngle = ((cEmaAngle + 0.25 * delta) + 360) % 360;
+  }
+
+  return cEmaAngle;
+}
+
+function getAccuracy() {
+  if (cBuf.length < 3) return 0;
+  // R-value → accuracy %: R≈1 means all readings agree perfectly
+  if (cRvalue >= 0.98) return 99;
+  if (cRvalue >= 0.95) return 92;
+  if (cRvalue >= 0.90) return 82;
+  if (cRvalue >= 0.80) return 68;
+  if (cRvalue >= 0.65) return 50;
+  return 30;
+}
+
+function updateAccuracyBar() {
+  const acc = getAccuracy();
+  const bar = document.getElementById('c-accuracy-bar');
+  const lbl = document.getElementById('c-accuracy-lbl');
+  if (!bar || !lbl) return;
+  bar.style.width = acc + '%';
+  if (acc >= 85) {
+    bar.style.background = '#2D6A2D';
+    lbl.textContent = acc + '% ✅ Accurate';
+    lbl.style.color = '#7dd67d';
+  } else if (acc >= 55) {
+    bar.style.background = '#D4A017';
+    lbl.textContent = acc + '% Calibrating...';
+    lbl.style.color = '#F5C842';
+  } else {
+    bar.style.background = '#8B2500';
+    lbl.textContent = acc + '% — do figure-8';
+    lbl.style.color = '#ff9974';
+  }
+}
+
+const VASTU_FACING = {
+  N: {te:'🟢 ఉత్తరం — కుబేర (సంపద దేవుడు 💰) దిశ\nసంపద, ఆర్థిక అభివృద్ధికి శ్రేష్ఠం',bg:'rgba(45,106,45,0.35)',br:'rgba(45,106,45,0.6)'},
+  NE:{te:'🌟 ఈశాన్యం (ఉత్తర-తూర్పు మూల) — దేవతా స్థానం\nపూజ, ప్రార్థనకు సర్వోత్కృష్టం',bg:'rgba(212,160,23,0.25)',br:'rgba(212,160,23,0.6)'},
+  E: {te:'🟢 తూర్పు — ఇంద్ర క్షేత్రం\nఆరోగ్యం, కీర్తి, సూర్యశక్తి',bg:'rgba(45,106,45,0.35)',br:'rgba(45,106,45,0.6)'},
+  SE:{te:'🟡 ఆగ్నేయం (దక్షిణ-తూర్పు మూల) — అగ్ని కోణం\nవంటగది, విద్యుత్ కు అనుకూలం (పర్లేదు ✅)',bg:'rgba(232,101,26,0.25)',br:'rgba(232,101,26,0.5)'},
+  S: {te:'⚠️ దక్షిణం — యమ దిశ\nద్వారాలు చేయవద్దు ❌, గోడ బలంగా ఉంచండి',bg:'rgba(139,37,0,0.3)',br:'rgba(139,37,0,0.6)'},
+  SW:{te:'⚠️ నైఋతి (దక్షిణ-పశ్చిమ మూల) — శక్తి కోణం\nయజమాని బెడ్రూమ్, భారీ వస్తువులు',bg:'rgba(139,37,0,0.25)',br:'rgba(139,37,0,0.5)'},
+  W: {te:'🟢 పశ్చిమం — వరుణ దిశ\nపిల్లల చదువు, డైనింగ్ కు అనుకూలం (పర్లేదు ✅)',bg:'rgba(74,144,184,0.25)',br:'rgba(74,144,184,0.5)'},
+  NW:{te:'🟢 వాయవ్యం (ఉత్తర-పశ్చిమ మూల) — వాయు కోణం\nఅతిథి (చంద్రుని ప్రకారం రోజు 🌙) గది, గ్యారేజ్ కు అనుకూలం (పర్లేదు ✅)',bg:'rgba(74,144,184,0.2)',br:'rgba(74,144,184,0.4)'}
+};
+
+function degToDir(d){
+  d=((d%360)+360)%360;
+  if(d>=337.5||d<22.5) return {k:'N', label:'ఉత్తరం • North'};
+  if(d<67.5)  return {k:'NE',label:'ఈశాన్యం (ఉత్తర-తూర్పు మూల) • NE'};
+  if(d<112.5) return {k:'E', label:'తూర్పు • East'};
+  if(d<157.5) return {k:'SE',label:'ఆగ్నేయం (దక్షిణ-తూర్పు మూల) • SE'};
+  if(d<202.5) return {k:'S', label:'దక్షిణం • South'};
+  if(d<247.5) return {k:'SW',label:'నైఋతి (దక్షిణ-పశ్చిమ మూల) • SW'};
+  if(d<292.5) return {k:'W', label:'పశ్చిమం • West'};
+  return              {k:'NW',label:'వాయవ్యం (ఉత్తర-పశ్చిమ మూల) • NW'};
+}
+
+function drawDial(heading){
+  const canvas=document.getElementById('compass-canvas'); if(!canvas)return;
+  const ctx=canvas.getContext('2d'),S=270,cx=135,cy=135,R=124;
+  ctx.clearRect(0,0,S,S);
+  const grd=ctx.createRadialGradient(cx,cy,8,cx,cy,R);
+  grd.addColorStop(0,'#2a0e00'); grd.addColorStop(1,'#050100');
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+  ctx.strokeStyle='rgba(212,160,23,0.8)'; ctx.lineWidth=2.5; ctx.stroke();
+  const acc=getAccuracy();
+  const rc=acc>=85?'rgba(45,150,45,0.5)':acc>=60?'rgba(212,160,23,0.4)':'rgba(139,37,0,0.4)';
+  ctx.beginPath(); ctx.arc(cx,cy,R-6,0,Math.PI*2); ctx.strokeStyle=rc; ctx.lineWidth=1; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx,cy,R-20,0,Math.PI*2); ctx.strokeStyle='rgba(212,160,23,0.1)'; ctx.lineWidth=1; ctx.stroke();
+
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(-heading*Math.PI/180);
+  for(let i=0;i<360;i+=5){
+    const a=i*Math.PI/180,maj=i%45===0,med=i%15===0;
+    const len=maj?20:med?11:5, r1=R-2.5, r2=r1-len;
+    ctx.beginPath(); ctx.moveTo(Math.sin(a)*r1,-Math.cos(a)*r1); ctx.lineTo(Math.sin(a)*r2,-Math.cos(a)*r2);
+    ctx.strokeStyle=maj?'#D4A017':med?'rgba(212,160,23,0.45)':'rgba(212,160,23,0.18)'; ctx.lineWidth=maj?2.5:1; ctx.stroke();
+  }
+  const DIRS=[{deg:0,en:'N',col:'#E8651A',sz:16},{deg:45,en:'NE',col:'#F5C842',sz:11},{deg:90,en:'E',col:'#F5C842',sz:14},
+    {deg:135,en:'SE',col:'#F5C842',sz:11},{deg:180,en:'S',col:'#4A90B8',sz:14},{deg:225,en:'SW',col:'#F5C842',sz:11},
+    {deg:270,en:'W',col:'#F5C842',sz:14},{deg:315,en:'NW',col:'#F5C842',sz:11}];
+  DIRS.forEach(({deg,en,col,sz})=>{
+    const a=deg*Math.PI/180, lr=R-36;
+    ctx.save(); ctx.translate(Math.sin(a)*lr,-Math.cos(a)*lr); ctx.rotate(heading*Math.PI/180);
+    ctx.fillStyle=col; ctx.font=`bold ${sz}px Arial`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(en,0,0); ctx.restore();
+  });
+  ctx.restore();
+
+  // Fixed north triangle
+  ctx.save(); ctx.translate(cx,cy-R+14);
+  ctx.beginPath(); ctx.moveTo(0,-9); ctx.lineTo(8,7); ctx.lineTo(-8,7); ctx.closePath();
+  ctx.fillStyle='#E8651A'; ctx.shadowColor='#E8651A'; ctx.shadowBlur=10; ctx.fill();
+  ctx.shadowBlur=0; ctx.restore();
+  // Fixed south triangle
+  ctx.save(); ctx.translate(cx,cy+R-14);
+  ctx.beginPath(); ctx.moveTo(0,9); ctx.lineTo(8,-7); ctx.lineTo(-8,-7); ctx.closePath();
+  ctx.fillStyle='rgba(150,150,150,0.35)'; ctx.fill(); ctx.restore();
+}
+
+function updateCompassText(angle){
+  const deg=Math.round(((angle%360)+360)%360);
+  document.getElementById('c-deg').textContent=deg+'°';
+  const info=degToDir(deg);
+  document.getElementById('c-dir-te').textContent=info.label;
+  const v=VASTU_FACING[info.k];
+  if(v){const box=document.getElementById('c-vastu');
+    box.style.background=v.bg; box.style.border='1px solid '+v.br;
+    box.style.color='#fdf6e3'; box.style.fontStyle='normal'; box.style.whiteSpace='pre-line';
+    box.textContent=v.te;}
+  updateAccuracyBar();
+}
+
+function compassLoop(){
+  let diff = cTargetAngle - cDisplayAngle;
+  if (diff >  180) diff -= 360;
+  if (diff < -180) diff += 360;
+
+  const ad = Math.abs(diff);
+
+  if (ad > 0.5) {
+    // Adaptive easing — slow & stable
+    let speed;
+    if      (ad > 45) speed = 0.08;   // large jump: still gentle
+    else if (ad > 15) speed = 0.05;   // medium movement
+    else if (ad >  4) speed = 0.03;   // fine approach
+    else              speed = 0.015;  // ultra-smooth settle
+
+    cDisplayAngle += diff * speed;
+    cDisplayAngle  = ((cDisplayAngle % 360) + 360) % 360;
+  }
+
+  // ALWAYS redraw every frame so canvas never goes blank
+  drawDial(cDisplayAngle);
+  updateCompassText(cDisplayAngle);
+
+  if (cActive) cRAF = requestAnimationFrame(compassLoop);
+}
+
+function onOrientationEvent(e) {
+  let heading  = null;
+  let iosAccuracy = 999;
+
+  // ── Priority 1: iOS — webkitCompassHeading (device-compensated true heading) ──
+  if (typeof e.webkitCompassHeading === 'number' && e.webkitCompassHeading >= 0) {
+    heading     = e.webkitCompassHeading;
+    iosAccuracy = (typeof e.webkitCompassAccuracy === 'number') ? e.webkitCompassAccuracy : 25;
+    cSensorWorking = true;
+    // Reject iOS readings with poor calibration (>45° error)
+    if (cReadingCount > 3 && iosAccuracy > 45) return;
+  }
+
+  // ── Priority 2: Android deviceorientationabsolute (magnetic north locked) ──
+  else if (e.absolute === true && typeof e.alpha === 'number' && e.alpha !== null) {
+    heading = (360 - e.alpha + 360) % 360;
+    cSensorWorking      = true;
+    cAbsoluteSupported  = true;
+  }
+
+  // ── Priority 3: Relative orientation fallback (no absolute ref, still useful) ──
+  else if (!cAbsoluteSupported && typeof e.alpha === 'number' && e.alpha !== null) {
+    heading = (360 - e.alpha + 360) % 360;
+  }
+
+  if (heading === null) return;
+
+  cReadingCount++;
+  cTargetAngle = addReading(heading);
+
+  // Update status text
+  if (cSensorWorking) {
+    const acc    = getAccuracy();
+    const status = document.getElementById('c-status');
+    if (!status) return;
+    if (acc >= 85) {
+      status.textContent = '✅ Stable & Accurate';
+      status.style.color = '#7dd67d';
+    } else if (cReadingCount < 10) {
+      status.textContent = '⏳ Calibrating — hold flat, do figure-8';
+      status.style.color = '#F5C842';
+    } else {
+      status.textContent = '📐 Do figure-8 to improve accuracy';
+      status.style.color = '#ff9974';
+    }
+  }
+}
+
+function recalibrateCompass(){
+  cBuf=[]; cSinSum=0; cCosSum=0; cRvalue=0;
+  cReadingCount=0; cEmaAngle=-1; cDisplayAngle=cTargetAngle;
+  const s=document.getElementById('c-status');
+  if(s){ s.textContent='🔄 Recalibrated — do figure-8 slowly'; s.style.color='#F5C842'; }
+  updateAccuracyBar();
+}
+
+function startCompass(){
+  const btn=document.getElementById('c-btn'), status=document.getElementById('c-status');
+  if(cActive){
+    cActive=false; cancelAnimationFrame(cRAF);
+    window.removeEventListener('deviceorientationabsolute',onOrientationEvent,true);
+    window.removeEventListener('deviceorientation',onOrientationEvent,true);
+    btn.textContent='🧲 Start Compass'; btn.style.background='linear-gradient(135deg,#E8651A,#C4520E)';
+    status.textContent='⏹ ఆగిపోయింది'; status.style.color='rgba(253,246,227,0.4)';
+    drawDial(0); return;
+  }
+  function doStart(){
+    cActive=true; cSensorWorking=false; cAbsoluteSupported=false;
+    cBuf=[]; cReadingCount=0; cRvalue=0; cEmaAngle=-1;
+    window.addEventListener('deviceorientationabsolute',onOrientationEvent,true);
+    window.addEventListener('deviceorientation',onOrientationEvent,true);
+    cDisplayAngle = 0; cTargetAngle = 0;  // reset display
+    cRAF=requestAnimationFrame(compassLoop);
+    btn.textContent='⏹ Stop'; btn.style.background='linear-gradient(135deg,#2D6A2D,#1a3a1a)';
+    status.textContent='⏳ figure-8 చేయండి... calibrating'; status.style.color='#F5C842';
+    setTimeout(()=>{ if(cActive&&!cSensorWorking){
+      status.textContent='⚠️ Sensor లేదు — Chrome+https:// వాడాలి'; status.style.color='#ff9974';
+    }},5000);
+  }
+  if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+    DeviceOrientationEvent.requestPermission().then(s=>{if(s==='granted')doStart();
+      else status.textContent='⚠️ Permission denied';}).catch(()=>status.textContent='⚠️ Safari లో try చేయండి');
+  } else { doStart(); }
+}
+
+// Build direction summary grid
+const sumData = [
+  {dir:'N ఉత్తరం',te:'కుబేర (సంపద దేవుడు 💰) — సంపద',good:true},
+  {dir:'NE ఈశాన్యం (ఉత్తర-తూర్పు మూల)',te:'శివుడు — దైవం',good:true},
+  {dir:'E తూర్పు',te:'ఇంద్ర — ఆరోగ్యం',good:true},
+  {dir:'SE ఆగ్నేయం (దక్షిణ-తూర్పు మూల)',te:'అగ్ని — వంట',good:true},
+  {dir:'S దక్షిణం',te:'యముడు — జాగ్రత్త',good:false},
+  {dir:'SW నైఋతి (దక్షిణ-పశ్చిమ మూల)',te:'శక్తి — యజమాని',good:false},
+  {dir:'W పశ్చిమం',te:'వరుణ — విద్య',good:true},
+  {dir:'NW వాయవ్యం (ఉత్తర-పశ్చిమ మూల)',te:'వాయు — అతిథి (చంద్రుని ప్రకారం రోజు 🌙)',good:true}
+];
+document.getElementById('dir-summary').innerHTML = sumData.map(s=>`
+<div style="background:${s.good?'rgba(45,106,45,0.2)':'rgba(139,37,0,0.2)'};border:1px solid ${s.good?'rgba(45,106,45,0.4)':'rgba(139,37,0,0.4)'};border-radius:8px;padding:10px;text-align:center;">
+  <div style="font-size:12px;color:#F5C842;font-weight:bold;">${s.dir}</div>
+  <div style="font-size:13px;margin-top:3px;">${s.te}</div>
+  <div style="font-size:18px;margin-top:2px;">${s.good?'✅':'⚠️'}</div>
+</div>`).join('');
+
+
+// Draw initial static dial
+drawDial(0);
+</script>
+</body>
+</html>
